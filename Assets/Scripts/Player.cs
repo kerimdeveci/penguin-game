@@ -5,12 +5,15 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     float turnSpeed = 20f;
+    int health = 10;
     float speed = 2f;
     Animator animator;
     Rigidbody rigidbody;
     Vector3 movement;
     Quaternion rotation = Quaternion.identity;
     GameObject weapon;
+    GameObject model;
+    float lastDamage = -10f;
 
     float attackStart = -10f;
 
@@ -19,6 +22,7 @@ public class Player : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody>();
+        model = transform.Find("Model").gameObject;
         weapon = GameObject.FindGameObjectWithTag("PlayerWeapon");
         weapon.SetActive(false);
     }
@@ -27,6 +31,7 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         UpdateWeapon();
+        UpdateColor();
 
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -69,5 +74,43 @@ public class Player : MonoBehaviour
     {
         rigidbody.MovePosition(rigidbody.position + movement * animator.deltaPosition.magnitude * speed);
         rigidbody.MoveRotation(rotation);
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "EnemyWeapon")
+        {
+            TakeDamage();
+        }
+    }
+
+    private void TakeDamage()
+    {
+        Debug.Log("Enemy - TakeDamage");
+        iTween.PunchPosition(model, iTween.Hash("y", 0.5, "time", 1));
+        lastDamage = Time.time;
+
+        health--;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+
+    private void Die()
+    {
+        Debug.Log("Player - Die");
+    }
+
+
+
+    private void UpdateColor()
+    {
+        if (Time.time - lastDamage > 0.1f)
+        {
+        }
     }
 }

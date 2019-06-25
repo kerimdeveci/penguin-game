@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    enum State { Idle, Attacking, Walking, Following };
     int health = 10;
     public NavMeshAgent navMeshAgent;
     public Transform[] waypoints;
@@ -17,15 +18,19 @@ public class Enemy : MonoBehaviour
     float targetTime;
     bool turningToPlayer = false;
     float idleTimer;
+    float attackStart = -10f;
+    GameObject weapon;
 
     // Start is called before the first frame update
     void Start()
     {
         idleTimer = Time.time;
         target = null;
-        model = GameObject.Find("Enemy/Model");
+        model = transform.Find("Model").gameObject;
         rigidbody = GetComponent<Rigidbody>();
         navMeshAgent.SetDestination(waypoints[0].position);
+        weapon = transform.Find("EnemyWeapon").gameObject;
+        weapon.SetActive(false);
     }
 
     // Update is called once per frame
@@ -33,15 +38,18 @@ public class Enemy : MonoBehaviour
     {
         UpdateColor();
         UpdateIdle();
+        UpdateWeapon();
 
         if (target && Time.time - targetTime > 1.5f)
         {
-            Debug.Log(target.position.ToString());
-
             float distance = Vector3.Distance(transform.position, target.position);
             if (distance > 1.8f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, target.position, 2f * Time.deltaTime);
+            }
+            if (Time.time - attackStart > 2f)
+            {
+                Attack();
             }
             iTween.LookUpdate(gameObject, target.position, 0f);
         }
@@ -93,7 +101,7 @@ public class Enemy : MonoBehaviour
 
     private void TakeDamage()
     {
-        Debug.Log("TakeDamage");
+        Debug.Log("Enemy - TakeDamage");
         iTween.PunchPosition(model, iTween.Hash("y", 0.5, "time", 1));
         iTween.ColorTo(model, iTween.Hash("r", 1, "b", 1, "g", 1, "time", 0.02));
         lastDamage = Time.time;
@@ -120,5 +128,21 @@ public class Enemy : MonoBehaviour
         navMeshAgent.velocity = Vector3.zero;
         iTween.RotateBy(model, iTween.Hash("y", 2, "time", 8));
         iTween.ScaleTo(model, iTween.Hash("x", 0, "y", 0, "z", 0, "time", 2));
+    }
+
+    private bool IsAttacking()
+    {
+        return Time.time - attackStart < 0.2f;
+    }
+
+    private void UpdateWeapon()
+    {
+        weapon.SetActive(IsAttacking());
+    }
+
+    private void Attack()
+    {
+        Debug.Log("Enemy - Attack");
+        attackStart = Time.time;
     }
 }
