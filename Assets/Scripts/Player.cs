@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     Quaternion rotation = Quaternion.identity;
     GameObject weapon;
     GameObject model;
+    bool colorUpdated = false;
     float lastDamage = -10f;
 
     float attackStart = -10f;
@@ -48,7 +49,7 @@ public class Player : MonoBehaviour
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, movement, turnSpeed * Time.deltaTime, 0f);
         rotation = Quaternion.LookRotation(desiredForward);
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 1f)
         {
             Attack();
         }
@@ -57,6 +58,8 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Debug.Log("Attack");
+        iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 0.6f));
+        iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 0.5f));
         attackStart = Time.time;
     }
 
@@ -87,8 +90,10 @@ public class Player : MonoBehaviour
 
     private void TakeDamage()
     {
-        Debug.Log("Enemy - TakeDamage");
+        Debug.Log("Player - TakeDamage");
         iTween.PunchPosition(model, iTween.Hash("y", 0.5, "time", 1));
+        iTween.ColorTo(model, iTween.Hash("r", 0.3, "b", 0.3, "g", 0.3, "time", 0));
+        colorUpdated = true;
         lastDamage = Time.time;
 
         health--;
@@ -109,8 +114,10 @@ public class Player : MonoBehaviour
 
     private void UpdateColor()
     {
-        if (Time.time - lastDamage > 0.1f)
+        if (Time.time - lastDamage > 0.1f && colorUpdated)
         {
+            iTween.ColorTo(model, iTween.Hash("r", 0, "b", 0, "g", 0, "time", 0));
+            colorUpdated = false;
         }
     }
 }
