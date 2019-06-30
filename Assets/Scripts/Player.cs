@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
     GameObject model;
     bool colorUpdated = false;
     float lastDamage = -10f;
+    bool isWalking;
+    float timeWalkStep;
+    bool stepLeftFoot = true;
 
     float attackStart = -10f;
 
@@ -26,6 +29,7 @@ public class Player : MonoBehaviour
         model = transform.Find("Model").gameObject;
         weapon = GameObject.FindGameObjectWithTag("PlayerWeapon");
         weapon.SetActive(false);
+        iTween.RotateAdd(model, new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z - 20), 0.5f);
     }
 
     // Update is called once per frame
@@ -33,6 +37,7 @@ public class Player : MonoBehaviour
     {
         UpdateWeapon();
         UpdateColor();
+        UpdateWalk();
 
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -43,7 +48,7 @@ public class Player : MonoBehaviour
         bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
 
-        bool isWalking = hasHorizontalInput || hasVerticalInput;
+        isWalking = hasHorizontalInput || hasVerticalInput;
         animator.SetBool("IsWalking", isWalking);
 
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, movement, turnSpeed * Time.deltaTime, 0f);
@@ -77,6 +82,25 @@ public class Player : MonoBehaviour
     {
         rigidbody.MovePosition(rigidbody.position + movement * animator.deltaPosition.magnitude * speed);
         rigidbody.MoveRotation(rotation);
+    }
+
+
+    void UpdateWalk()
+    {
+        if (isWalking && Time.time - timeWalkStep > 0.2f)
+        {
+            if (stepLeftFoot)
+            {
+                iTween.RotateAdd(model, iTween.Hash("x", transform.rotation.x, "y", transform.rotation.y, "z", transform.rotation.z + 40, "easetype", "easeOutBounce", "time", 0.1f));
+
+            } 
+            else
+            {
+                iTween.RotateAdd(model, iTween.Hash("x", transform.rotation.x, "y", transform.rotation.y, "z", transform.rotation.z - 40, "easetype", "easeOutBounce", "time", 0.1f));
+            }
+            stepLeftFoot = !stepLeftFoot;
+            timeWalkStep = Time.time;
+        }
     }
 
 
