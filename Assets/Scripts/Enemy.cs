@@ -3,34 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Actor
 {
-    enum State { Idle, Attacking, Walking, Following };
-    int health = 10;
     public NavMeshAgent navMeshAgent;
     public Transform[] waypoints;
-    Rigidbody rigidbody;
     int waypointIndex;
-    GameObject model;
-    float lastDamage = -10f;
+
     Transform target;
-    Quaternion rotation = Quaternion.identity;
-    float targetTime;
-    bool turningToPlayer = false;
-    float idleTimer;
-    float attackStart = -10f;
     GameObject weapon;
-    bool colorUpdated = false;
-    State state;
+    Quaternion rotation = Quaternion.identity;
+
+    bool turningToPlayer = false;
+
+    float timeSetTarget;
+    float timeLastIdleAnimation;
 
     // Start is called before the first frame update
     void Start()
     {
-        state = State.Idle;
-        idleTimer = Time.time;
+        base.Start();
+        timeLastIdleAnimation = Time.time;
         target = null;
-        model = transform.Find("Model").gameObject;
-        rigidbody = GetComponent<Rigidbody>();
         navMeshAgent.SetDestination(waypoints[0].position);
         weapon = transform.Find("EnemyWeapon").gameObject;
         weapon.SetActive(false);
@@ -39,11 +32,18 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        UpdateColor();
-        UpdateIdle();
         UpdateWeapon();
 
-        if (target && Time.time - targetTime > 1.5f)
+        if (IsDead())
+        {
+            navMeshAgent.isStopped = true;
+            navMeshAgent.velocity = Vector3.zero;
+            return;
+        }
+
+        UpdateIdle();
+
+        if (target && Time.time - timeSetTarget > 1.5f)
         {
             float distance = Vector3.Distance(transform.position, target.position);
             if (distance > 1.8f)
@@ -52,9 +52,8 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                if (Time.time - attackStart > 1.8f)
+                if (Time.time - timeStartAttack > 1.8f)
                 {
-                    state = State.Attacking;
                     Attack();
                 }
             }
@@ -78,11 +77,11 @@ public class Enemy : MonoBehaviour
 
     void UpdateIdle()
     {
-        if (Time.time - idleTimer > 1f && state == State.Idle && Time.time - attackStart > 2f)
+        if (Time.time - timeLastIdleAnimation > 1f && IsState(State.Idle) && Time.time - timeStartAttack > 2f)
         {
             iTween.PunchPosition(model, iTween.Hash("y", -0.4, "time", 0.7f));
             iTween.PunchScale(model, iTween.Hash("x", 0.1, "time", 0.9f));
-            idleTimer = Time.time;
+            timeLastIdleAnimation = Time.time;
         }
     }
 
@@ -95,54 +94,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "PlayerWeapon")
         {
             TakeDamage();
             target = other.gameObject.GetComponentInParent<Transform>();
-            targetTime = Time.time;
+            timeSetTarget = Time.time;
         }
     }
 
-    private void TakeDamage()
-    {
-        Debug.Log("Enemy - TakeDamage");
-        iTween.PunchPosition(model, iTween.Hash("y", 0.5, "time", 1));
-        iTween.ColorTo(model, iTween.Hash("r", 0.3, "b", 0.3, "g", 0.3, "time", 0));
-        colorUpdated = true;
-        lastDamage = Time.time;
-
-        health--;
-
-        if (health <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void UpdateColor()
-    {
-        if (Time.time - lastDamage > 0.1f && colorUpdated)
-        {
-            iTween.ColorTo(model, iTween.Hash("r", 0, "b", 0, "g", 0, "time", 0));
-            colorUpdated = false;
-        }
-    }
-
-    private void Die()
-    {
-        navMeshAgent.isStopped = true;
-        navMeshAgent.velocity = Vector3.zero;
-        iTween.RotateBy(model, iTween.Hash("y", 2, "time", 8));
-        iTween.ScaleTo(model, iTween.Hash("x", 0, "y", 0, "z", 0, "time", 2));
-    }
-
-    private bool IsAttacking()
-    {
-        return Time.time - attackStart < 0.2f;
-    }
 
     private void UpdateWeapon()
     {
@@ -153,12 +114,15 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Enemy - Attack");
 
+        SetState(State.Attacking);
+        timeStartAttack = Time.time;
+
         //iTween.Stop(model);
         //transform.localScale = new Vector3(1, 1, 1);
         //transform.position = new Vector3(transform.position.x, 0, transform.position.z);
         iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 1f));
         iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 1.5f));
-        attackStart = Time.time;
-        state = State.Idle;
+
+        SetState(State.Idle);
     }
 }
