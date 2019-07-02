@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     Quaternion rotation = Quaternion.identity;
     GameObject weapon;
     GameObject model;
+    GameObject weaponArm;
     bool colorUpdated = false;
     float lastDamage = -10f;
     bool isWalking;
@@ -27,9 +28,11 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         model = transform.Find("Model").gameObject;
+        weaponArm = transform.Find("Model/ArmedArm").gameObject;
         weapon = GameObject.FindGameObjectWithTag("PlayerWeapon");
         weapon.SetActive(false);
-        iTween.RotateAdd(model, new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z - 20), 0.5f);
+
+        Attack();
     }
 
     // Update is called once per frame
@@ -54,7 +57,7 @@ public class Player : MonoBehaviour
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, movement, turnSpeed * Time.deltaTime, 0f);
         rotation = Quaternion.LookRotation(desiredForward);
 
-        if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 1f)
+        if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 0.8f)
         {
             Attack();
         }
@@ -63,9 +66,27 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Debug.Log("Attack");
-        iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 0.6f));
-        iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 0.5f));
+        iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 0.6f, "delay", 0.1f));
+        iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 0.5f, "delay", 0.1f));
+
+        iTween.RotateBy(weaponArm, iTween.Hash("x", -0.5, "time", 0.1f, "oncomplete", "AnimationArmDown", "oncompletetarget", this.gameObject));
+
         attackStart = Time.time;
+
+        //Tornado Club animation
+        //iTween.RotateBy(weaponArm, iTween.Hash("x", 80, "time", 0.7f));
+    }
+
+    public void AnimationArmDown()
+    {
+        Debug.Log("AnimationArmDown");
+        iTween.RotateBy(weaponArm, iTween.Hash("x", 0.8, "time", 0.2f, "oncomplete", "AnimationArmReturn", "oncompletetarget", this.gameObject));
+    }
+
+    public void AnimationArmReturn()
+    {
+        Debug.Log("AnimationArmReturn");
+        iTween.RotateBy(weaponArm, iTween.Hash("x", -0.3, "time", 0.2f));
     }
 
     private bool IsAttacking()
@@ -87,20 +108,20 @@ public class Player : MonoBehaviour
 
     void UpdateWalk()
     {
-        if (isWalking && Time.time - timeWalkStep > 0.2f)
-        {
-            if (stepLeftFoot)
-            {
-                iTween.RotateAdd(model, iTween.Hash("x", transform.rotation.x, "y", transform.rotation.y, "z", transform.rotation.z + 40, "easetype", "easeOutBounce", "time", 0.1f));
+        //if (isWalking && Time.time - timeWalkStep > 0.2f)
+        //{
+        //    if (stepLeftFoot)
+        //    {
+        //        iTween.RotateAdd(model, iTween.Hash("x", transform.rotation.x, "y", transform.rotation.y, "z", transform.rotation.z + 40, "easetype", "easeOutBounce", "time", 0.1f));
 
-            } 
-            else
-            {
-                iTween.RotateAdd(model, iTween.Hash("x", transform.rotation.x, "y", transform.rotation.y, "z", transform.rotation.z - 40, "easetype", "easeOutBounce", "time", 0.1f));
-            }
-            stepLeftFoot = !stepLeftFoot;
-            timeWalkStep = Time.time;
-        }
+        //    } 
+        //    else
+        //    {
+        //        iTween.RotateAdd(model, iTween.Hash("x", transform.rotation.x, "y", transform.rotation.y, "z", transform.rotation.z - 40, "easetype", "easeOutBounce", "time", 0.1f));
+        //    }
+        //    stepLeftFoot = !stepLeftFoot;
+        //    timeWalkStep = Time.time;
+        //}
     }
 
 
