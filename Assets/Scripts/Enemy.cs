@@ -6,27 +6,35 @@ using UnityEngine.AI;
 public class Enemy : Actor
 {
     public NavMeshAgent navMeshAgent;
-    public Transform[] waypoints;
-    int waypointIndex;
+    private float initialX;
+    private float initialZ;
 
     Transform target;
     GameObject weapon;
     Quaternion rotation = Quaternion.identity;
+    Random random;
 
     bool turningToPlayer = false;
 
     float timeSetTarget;
     float timeLastIdleAnimation;
+    float timeLastWaypoint;
 
     // Start is called before the first frame update
     void Start()
     {
         base.Start();
+        random = new Random();
         timeLastIdleAnimation = Time.time;
         target = null;
-        navMeshAgent.SetDestination(waypoints[0].position);
+        navMeshAgent.SetDestination(NextWaypoint());
         weapon = transform.Find("EnemyWeapon").gameObject;
         weapon.SetActive(false);
+    }
+
+    Vector3 NextWaypoint()
+    {
+        return new Vector3(initialX + Random.Range(-4f, 4f), 0, initialZ + Random.Range(-4f, 4f));
     }
 
     // Update is called once per frame
@@ -69,8 +77,16 @@ public class Enemy : Actor
         {
             if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
             {
-                waypointIndex = (waypointIndex + 1) % waypoints.Length;
-                navMeshAgent.SetDestination(waypoints[waypointIndex].position);
+                if (Time.time - timeLastWaypoint > 7f)
+                {
+                    timeLastWaypoint = Time.time;
+                    navMeshAgent.SetDestination(NextWaypoint());
+                }
+            }
+            if (Time.time - timeLastWaypoint > 15f)
+            {
+                timeLastWaypoint = Time.time;
+                navMeshAgent.SetDestination(NextWaypoint());
             }
         }
     }
