@@ -19,17 +19,22 @@ public class Enemy : Actor
     float timeSetTarget;
     float timeLastIdleAnimation;
     float timeLastWaypoint;
+    float timeToNextWaypoint;
 
     // Start is called before the first frame update
     void Start()
     {
         base.Start();
+        initialX = transform.position.x;
+        initialZ = transform.position.z;
         random = new Random();
-        timeLastIdleAnimation = Time.time;
+        timeLastIdleAnimation = Random.Range(1f, 2f);
         target = null;
-        navMeshAgent.SetDestination(NextWaypoint());
+        Vector3 next = NextWaypoint();
+        navMeshAgent.SetDestination(next);
         weapon = transform.Find("EnemyWeapon").gameObject;
         weapon.SetActive(false);
+        transform.rotation = Quaternion.LookRotation(new Vector3(0, Random.Range(0f, 180f), 0));
     }
 
     Vector3 NextWaypoint()
@@ -77,16 +82,21 @@ public class Enemy : Actor
         {
             if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
             {
-                if (Time.time - timeLastWaypoint > 7f)
+                if (Time.time - timeLastWaypoint > timeToNextWaypoint)
                 {
                     timeLastWaypoint = Time.time;
-                    navMeshAgent.SetDestination(NextWaypoint());
+                    timeToNextWaypoint = Random.Range(5f, 12f);
+                    Vector3 next = NextWaypoint();
+                    Debug.Log(initialZ);
+                    Debug.Log(next);
+                    navMeshAgent.SetDestination(next);
                 }
             }
-            if (Time.time - timeLastWaypoint > 15f)
+            if (Time.time - timeLastWaypoint > 8f)
             {
                 timeLastWaypoint = Time.time;
-                navMeshAgent.SetDestination(NextWaypoint());
+                timeToNextWaypoint = Random.Range(5f, 12f);
+                navMeshAgent.SetDestination(new Vector3(initialX, 0, initialZ));
             }
         }
     }
