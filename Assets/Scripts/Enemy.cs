@@ -21,7 +21,6 @@ public class Enemy : Actor
     float timeLastWaypoint;
     float timeToNextWaypoint;
 
-    // Start is called before the first frame update
     void Start()
     {
         base.Start();
@@ -42,7 +41,6 @@ public class Enemy : Actor
         return new Vector3(initialX + Random.Range(-4f, 4f), 0, initialZ + Random.Range(-4f, 4f));
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         UpdateWeapon();
