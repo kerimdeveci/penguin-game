@@ -5,7 +5,6 @@ using UnityEngine;
 public class InteractPrompt : MonoBehaviour
 {
     public float fadeDuration = 1f;
-    float timer;
     CanvasGroup canvasGroup;
     bool fadeIn = false;
     bool fadeOut = false;
@@ -14,39 +13,60 @@ public class InteractPrompt : MonoBehaviour
     void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (fadeIn)
+        if (fadeIn && canvasGroup.alpha < 1)
         {
-            timer += Time.deltaTime;
-            canvasGroup.alpha = timer / fadeDuration;
+            canvasGroup.alpha += 0.2f;
         }
-        if (fadeOut)
+        if (fadeOut && canvasGroup.alpha > 0)
         {
-            timer += Time.deltaTime;
-            canvasGroup.alpha = timer * fadeDuration;
+            canvasGroup.alpha -= 0.2f;
         }
     }
 
-    public void OnEnable()
+    public bool IsFadingIn()
     {
-        canvasGroup.alpha = 0;
+        return fadeIn;
+    }
+
+    public bool IsFadingOut()
+    {
+        return fadeOut;
+    }
+
+    public void FadeIn()
+    {
         fadeIn = true;
-        Debug.Log("OnEnable");
+        fadeOut = false;
     }
 
-    public void OnDisable()
+    public void FadeOut()
     {
-        if (canvasGroup.alpha == 1)
-        {
-            fadeOut = true;
-            StartCoroutine("Fade");
-        }
-        Debug.Log("OnDisable");
+        fadeOut = true;
+        fadeIn = false;
     }
+
+    //public void OnEnable()
+    //{
+    //    canvasGroup.alpha = 0;
+    //    fadeIn = true;
+    //    Debug.Log("OnEnable");
+    //}
+
+    //public void OnDisable()
+    //{
+    //    if (canvasGroup.alpha == 1)
+    //    {
+    //        fadeOut = true;
+    //        StartCoroutine("Fade");
+    //    }
+    //    Debug.Log("OnDisable");
+    //}
 
     IEnumerator Fade()
     {

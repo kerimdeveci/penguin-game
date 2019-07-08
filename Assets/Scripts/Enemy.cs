@@ -85,8 +85,6 @@ public class Enemy : Actor
                     timeLastWaypoint = Time.time;
                     timeToNextWaypoint = Random.Range(5f, 12f);
                     Vector3 next = NextWaypoint();
-                    Debug.Log(initialZ);
-                    Debug.Log(next);
                     navMeshAgent.SetDestination(next);
                 }
             }

@@ -6,8 +6,9 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     public GameObject player;
-    public GameObject interactPrompt;
-    public CanvasGroup interactPromptCanvasGroup;
+    GameObject canvas;
+    InteractPrompt interactPrompt;
+    DialogueBox dialogueBox;
     bool playerInRange = false;
     bool talking = false;
     bool waitingForInput = false;
@@ -19,9 +20,9 @@ public class Interactable : MonoBehaviour
 
     void Awake()
     {
-        interactPromptCanvasGroup = interactPrompt.GetComponent<CanvasGroup>();
-        interactPromptCanvasGroup.alpha = 0;lastAction = Time.time;
-        lastAction = Time.time;
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
+        interactPrompt = canvas.transform.Find("InteractPrompt").GetComponent<InteractPrompt>();
+        dialogueBox = canvas.transform.Find("DialogueBox").GetComponent<DialogueBox>();
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("Hello", null));
@@ -32,10 +33,7 @@ public class Interactable : MonoBehaviour
     
     void Update()
     {
-        UpdatePrompt();
         CheckPromptInput();
-        UpdateDialogue();
-        CheckDialogueInput();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,6 +42,7 @@ public class Interactable : MonoBehaviour
         {
             Debug.Log("Player entered interactive area");
             playerInRange = true;
+            interactPrompt.FadeIn();
         }
     }
 
@@ -53,50 +52,10 @@ public class Interactable : MonoBehaviour
         if (other.gameObject == player)
         {
             Debug.Log("Player left interactive area");
-        }
-    }
-
-    void UpdateDialogue()
-    {
-        if (talking && !waitingForInput)
-        {
-            NextPage();
-        }
-        
-        if (talking && !playerInRange)
-        {
-            Debug.Log("End Conversation");
-            dialogueCursor = 0;
+            interactPrompt.FadeOut();
+            dialogueBox.EndConversation();
             talking = false;
         }
-    }
-
-    void CheckDialogueInput()
-    {
-        //Debug.Log(talking && waitingForInput && Time.time - lastAction > lastActionCooldown);
-        if (talking && waitingForInput && Time.time - lastAction > lastActionCooldown)
-        {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                lastAction = Time.time;
-                waitingForInput = false;
-            }
-        }
-    }
-
-    void NextPage()
-    {
-        if (dialogueCursor >= dialogue.Count)
-        {
-            Debug.Log("End Conversation");
-            dialogueCursor = 0;
-            talking = false;
-            return;
-        }
-        Debug.Log("Turn to page " + dialogueCursor);
-        Debug.Log(dialogue[dialogueCursor].GetMessage());
-        dialogueCursor++;
-        waitingForInput = true;
     }
 
     void CheckPromptInput()
@@ -106,21 +65,9 @@ public class Interactable : MonoBehaviour
             if (Input.GetButtonDown("Fire1"))
             {
                 lastAction = Time.time;
-                Debug.Log("Start conversation");
+                dialogueBox.StartConversation(dialogue);
                 talking = true;
             }
-        }
-    }
-
-    void UpdatePrompt()
-    {
-        if (playerInRange && !talking)
-        {
-            interactPromptCanvasGroup.alpha += 0.2f;
-        }
-        else
-        {
-            interactPromptCanvasGroup.alpha -= 0.2f;
         }
     }
 }

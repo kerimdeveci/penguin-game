@@ -79,13 +79,11 @@ public class Player : MonoBehaviour
 
     public void AnimationArmDown()
     {
-        Debug.Log("AnimationArmDown");
         iTween.RotateBy(weaponArm, iTween.Hash("x", 0.8, "time", 0.2f, "oncomplete", "AnimationArmReturn", "oncompletetarget", this.gameObject));
     }
 
     public void AnimationArmReturn()
     {
-        Debug.Log("AnimationArmReturn");
         iTween.RotateBy(weaponArm, iTween.Hash("x", -0.3, "time", 0.2f));
     }
 
