@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class DialogueBox : MonoBehaviour
 {
-    public GameObject player;
+    Player player;
     GameObject canvas;
     InteractPrompt interactPrompt;
+    GameObject dialogueBox;
     Text textBox;
     
     bool playerInRange = false;
@@ -22,8 +23,11 @@ public class DialogueBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         canvas = GameObject.FindGameObjectWithTag("Canvas");
+        dialogueBox = canvas.transform.Find("DialogueBox").gameObject;
         textBox = canvas.transform.Find("DialogueBox/DialogueText").GetComponent<Text>();
+        dialogueBox.SetActive(false);
         Debug.Log(textBox);
     }
 
@@ -74,16 +78,21 @@ public class DialogueBox : MonoBehaviour
 
     public void EndConversation()
     {
+        Debug.Log("End Conversation");
+        dialogueBox.SetActive(false);
+        textBox.text = "";
         dialogueCursor = 0;
         talking = false;
-        Debug.Log("End Conversation");
+        player.SetListening(false);
     }
 
     public void StartConversation(List<Page> dialogue)
     {
         Debug.Log("Start Conversation");
+        dialogueBox.SetActive(true);
         this.dialogue = dialogue;
         talking = true;
+        player.SetListening(true);
         NextPage();
     }
 }

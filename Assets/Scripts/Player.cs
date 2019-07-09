@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     bool isWalking;
     float timeWalkStep;
     bool stepLeftFoot = true;
+    public bool listening;
+    bool inInteractRange;
 
     float attackStart = -10f;
 
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour
         weaponArm = transform.Find("Model/ArmedArm").gameObject;
         weapon = GameObject.FindGameObjectWithTag("PlayerWeapon");
         weapon.SetActive(false);
+        listening = false;
 
         Attack();
     }
@@ -57,7 +60,7 @@ public class Player : MonoBehaviour
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, movement, turnSpeed * Time.deltaTime, 0f);
         rotation = Quaternion.LookRotation(desiredForward);
 
-        if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 0.8f)
+        if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 0.8f && !IsListening() && !IsInInteractRange())
         {
             Attack();
         }
@@ -103,6 +106,26 @@ public class Player : MonoBehaviour
         rigidbody.MoveRotation(rotation);
     }
 
+    public bool IsListening()
+    {
+        return listening;
+    }
+
+    public void SetListening(bool listening)
+    {
+        this.listening = listening;
+    }
+
+    public bool IsInInteractRange()
+    {
+        return inInteractRange;
+    }
+
+    public void SetInInteractRange(bool inInteractRange)
+    {
+        this.inInteractRange = inInteractRange;
+    }
+
 
     void UpdateWalk()
     {
@@ -128,6 +151,18 @@ public class Player : MonoBehaviour
         if (other.gameObject.name == "EnemyWeapon")
         {
             TakeDamage();
+        }
+        if (other.gameObject.name == "Interactable")
+        {
+            SetInInteractRange(true);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name == "Interactable")
+        {
+            SetInInteractRange(false);
         }
     }
 

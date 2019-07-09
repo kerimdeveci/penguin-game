@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public GameObject player;
+    Player player;
     GameObject canvas;
     InteractPrompt interactPrompt;
     DialogueBox dialogueBox;
@@ -20,6 +20,7 @@ public class Interactable : MonoBehaviour
 
     void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         interactPrompt = canvas.transform.Find("InteractPrompt").GetComponent<InteractPrompt>();
         dialogueBox = canvas.transform.Find("DialogueBox").GetComponent<DialogueBox>();
@@ -34,11 +35,12 @@ public class Interactable : MonoBehaviour
     void Update()
     {
         CheckPromptInput();
+        CheckPlayerListening();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.name == "Player")
         {
             Debug.Log("Player entered interactive area");
             playerInRange = true;
@@ -49,7 +51,7 @@ public class Interactable : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         playerInRange = false;
-        if (other.gameObject == player)
+        if (other.gameObject.name == "Player")
         {
             Debug.Log("Player left interactive area");
             interactPrompt.FadeOut();
@@ -67,6 +69,17 @@ public class Interactable : MonoBehaviour
                 lastAction = Time.time;
                 dialogueBox.StartConversation(dialogue);
                 talking = true;
+            }
+        }
+    }
+
+    void CheckPlayerListening()
+    {
+        if (talking)
+        {
+            if (!player.IsListening())
+            {
+                talking = false;
             }
         }
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InteractPrompt : MonoBehaviour
 {
+    Player player;
     public float fadeDuration = 1f;
     CanvasGroup canvasGroup;
     bool fadeIn = false;
@@ -12,6 +13,7 @@ public class InteractPrompt : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0;
     }
@@ -27,7 +29,16 @@ public class InteractPrompt : MonoBehaviour
         {
             canvasGroup.alpha -= 0.2f;
         }
+        if (canvasGroup.alpha > 0)
+        {
+            if (player.IsListening())
+            {
+                fadeIn = false;
+                fadeOut = true;
+            }
+        }
     }
+
 
     public bool IsFadingIn()
     {
