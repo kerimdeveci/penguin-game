@@ -39,6 +39,11 @@ public class InteractPrompt : MonoBehaviour
         }
     }
 
+    public bool IsVisible()
+    {
+        return canvasGroup.alpha > 0.5f;
+    }
+
 
     public bool IsFadingIn()
     {

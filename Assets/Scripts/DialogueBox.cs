@@ -18,7 +18,13 @@ public class DialogueBox : MonoBehaviour
     List<Page> dialogue;
     int dialogueCursor = 0;
     float lastAction = 0;
-    float lastActionCooldown = 0.5f;
+    float lastActionCooldown = 0.1f;
+
+    public bool scrolling;
+    float lastPrint;
+    float scrollSpeed;
+    int scrollingCursor;
+    string currentLine;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +35,10 @@ public class DialogueBox : MonoBehaviour
         textBox = canvas.transform.Find("DialogueBox/DialogueText").GetComponent<Text>();
         dialogueBox.SetActive(false);
         Debug.Log(textBox);
+
+        scrolling = false;
+        scrollSpeed = 0.005f;
+        scrollingCursor = 0;
     }
 
     // Update is called once per frame
@@ -42,7 +52,17 @@ public class DialogueBox : MonoBehaviour
     {
         if (talking && !waitingForInput)
         {
-            NextPage();
+            if (scrolling && Time.time - lastPrint >= scrollSpeed)
+            {
+                textBox.text += currentLine.ToCharArray()[scrollingCursor].ToString();
+                ++scrollingCursor;
+                if (scrollingCursor == currentLine.Length)
+                {
+                    scrolling = false;
+                    waitingForInput = true;
+                }
+                lastPrint = Time.time;
+            }
         }
     }
 
@@ -56,7 +76,7 @@ public class DialogueBox : MonoBehaviour
             if (Input.GetButtonDown("Fire1"))
             {
                 lastAction = Time.time;
-                waitingForInput = false;
+                NextPage();
             }
         }
     }
@@ -71,9 +91,12 @@ public class DialogueBox : MonoBehaviour
         }
         Debug.Log("Turn to page " + dialogueCursor);
         Debug.Log(dialogue[dialogueCursor].GetMessage());
-        textBox.text = dialogue[dialogueCursor].GetMessage();
+        textBox.text = "";
+        currentLine = dialogue[dialogueCursor].GetMessage();
         dialogueCursor++;
-        waitingForInput = true;
+        scrollingCursor = 0;
+        scrolling = true;
+        waitingForInput = false;
     }
 
     public void EndConversation()

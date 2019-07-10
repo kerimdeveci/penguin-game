@@ -18,6 +18,11 @@ public class Interactable : MonoBehaviour
     float lastAction;
     float lastActionCooldown = 0.5f;
 
+    public bool scrolling;
+    float lastPrint;
+    float scrollSpeed;
+    int scrollingCursor;
+
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -69,6 +74,10 @@ public class Interactable : MonoBehaviour
                 lastAction = Time.time;
                 dialogueBox.StartConversation(dialogue);
                 talking = true;
+            }
+            if (!interactPrompt.IsVisible())
+            {
+                interactPrompt.FadeIn();
             }
         }
     }
