@@ -11,9 +11,10 @@ public class Player : MonoBehaviour
     Rigidbody rigidbody;
     Vector3 movement;
     Quaternion rotation = Quaternion.identity;
-    GameObject weapon;
+    GameObject weaponObject;
     GameObject model;
     GameObject weaponArm;
+    public Weapon weapon { get; set; }
     bool colorUpdated = false;
     float lastDamage = -10f;
     bool isWalking;
@@ -31,8 +32,8 @@ public class Player : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         model = transform.Find("Model").gameObject;
         weaponArm = transform.Find("Model/ArmedArm").gameObject;
-        weapon = GameObject.FindGameObjectWithTag("PlayerWeapon");
-        weapon.SetActive(false);
+        weaponObject = GameObject.FindGameObjectWithTag("PlayerWeapon");
+        weaponObject.SetActive(false);
         listening = false;
 
         Attack();
@@ -97,7 +98,7 @@ public class Player : MonoBehaviour
 
     private void UpdateWeapon()
     {
-        weapon.SetActive(IsAttacking());
+        weaponObject.SetActive(IsAttacking());
     }
 
     private void OnAnimatorMove()
@@ -126,7 +127,6 @@ public class Player : MonoBehaviour
         this.inInteractRange = inInteractRange;
     }
 
-
     void UpdateWalk()
     {
         //if (isWalking && Time.time - timeWalkStep > 0.2f)
@@ -144,7 +144,6 @@ public class Player : MonoBehaviour
         //    timeWalkStep = Time.time;
         //}
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -182,13 +181,10 @@ public class Player : MonoBehaviour
         }
     }
 
-
     private void Die()
     {
         Debug.Log("Player - Die");
     }
-
-
 
     private void UpdateColor()
     {
@@ -198,4 +194,15 @@ public class Player : MonoBehaviour
             colorUpdated = false;
         }
     }
+}
+
+public class Weapon
+{
+    private string weaponName { get; set; }
+    private string buffName { get; set; }
+    private int attack { get; set; }
+    private float modifierChance { get; set; }
+    private WeaponModifier modifier { get; set; }
+
+    public enum WeaponModifier { Stun, Poison, Burn, Shrink, Freeze };
 }
