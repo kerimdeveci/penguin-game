@@ -13,17 +13,13 @@ public class Interactable : MonoBehaviour
     bool talking = false;
     bool waitingForInput = false;
 
-    List<Page> dialogue;
+    public List<Page> dialogue;
     int dialogueCursor = 0;
     float lastAction;
     float lastActionCooldown = 0.5f;
 
-    public bool scrolling;
-    float lastPrint;
-    float scrollSpeed;
-    int scrollingCursor;
 
-    void Awake()
+    public void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         canvas = GameObject.FindGameObjectWithTag("Canvas");
@@ -31,13 +27,10 @@ public class Interactable : MonoBehaviour
         dialogueBox = canvas.transform.Find("DialogueBox").GetComponent<DialogueBox>();
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("Hello", null));
-        dialogue.Add(new Page("The quick brown fox jumps over the lazy dog", null));
-        dialogue.Add(new Page("Pack my box with five dozen liquor jugs", null));
-        dialogue.Add(new Page("The five boxing wizards jump quickly", null));
+        dialogue.Add(new Page("NPC does not have dialogue set", null));
     }
     
-    void Update()
+    public void Update()
     {
         CheckPromptInput();
         CheckPlayerListening();
