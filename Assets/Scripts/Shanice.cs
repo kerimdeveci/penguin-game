@@ -9,7 +9,7 @@ public class Shanice : Interactable
         base.Start();
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("Hello, this is Shanice", null));
+        dialogue.Add(new Page("Hello, this is Shanice"));
     }
 
     void Update()

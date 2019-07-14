@@ -27,7 +27,7 @@ public class Interactable : MonoBehaviour
         dialogueBox = canvas.transform.Find("DialogueBox").GetComponent<DialogueBox>();
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("NPC does not have dialogue set", null));
+        dialogue.Add(new Page("NPC does not have dialogue set"));
     }
     
     public void Update()
@@ -89,33 +89,34 @@ public class Interactable : MonoBehaviour
 
 public class Page
 {
-    private string message;
-    private OrderedDictionary options;
+    public enum PageType { Line, Option, Window };
+
+    public string Message { get; set; }
+    public string Window { get; set; }
+    public OrderedDictionary Options { get; set; }
+    public PageType Type { get; set; }
 
     public Page(string message)
     {
-        this.message = message;
-        this.options = null;
+        this.Message = message;
+        this.Options = null;
+        this.Window = null;
+        this.Type = PageType.Line;
+    }
+
+    public Page(string message, string window)
+    {
+        this.Message = message;
+        this.Window = window;
+        this.Options = null;
+        this.Type = PageType.Window;
     }
 
     public Page(string message, OrderedDictionary options)
     {
-        this.message = message;
-        this.options = options;
-    }
-
-    public bool HasOptions()
-    {
-        return this.options != null;
-    }
-
-    public string GetMessage()
-    {
-        return message;
-    }
-
-    public OrderedDictionary GetOptions()
-    {
-        return options;
+        this.Message = message;
+        this.Options = options;
+        this.Window = null;
+        this.Type = PageType.Option;
     }
 }

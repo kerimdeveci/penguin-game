@@ -50,5 +50,7 @@ public class Enhance : MonoBehaviour
     public void ButtonClickLeave()
     {
         Debug.Log("ButtonClickLeave");
+        Close();
+        player.SetListening(false);
     }
 }

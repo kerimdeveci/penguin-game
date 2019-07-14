@@ -46,20 +46,28 @@ public class Player : MonoBehaviour
         UpdateColor();
         UpdateWalk();
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        if (!IsListening())
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
 
-        movement.Set(horizontal, 0f, vertical);
-        movement.Normalize();
+            movement.Set(horizontal, 0f, vertical);
+            movement.Normalize();
 
-        bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
-        bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
+            bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
+            bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
 
-        isWalking = hasHorizontalInput || hasVerticalInput;
-        animator.SetBool("IsWalking", isWalking);
+            isWalking = hasHorizontalInput || hasVerticalInput;
+            animator.SetBool("IsWalking", isWalking);
 
-        Vector3 desiredForward = Vector3.RotateTowards(transform.forward, movement, turnSpeed * Time.deltaTime, 0f);
-        rotation = Quaternion.LookRotation(desiredForward);
+            Vector3 desiredForward = Vector3.RotateTowards(transform.forward, movement, turnSpeed * Time.deltaTime, 0f);
+            rotation = Quaternion.LookRotation(desiredForward);
+
+        }
+        else
+        {
+            rigidbody.velocity = Vector3.zero;
+        }
 
         if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 0.8f && !IsListening() && !IsInInteractRange())
         {

@@ -89,10 +89,18 @@ public class DialogueBox : MonoBehaviour
             EndConversation();
             return;
         }
-        Debug.Log("Turn to page " + dialogueCursor);
-        Debug.Log(dialogue[dialogueCursor].GetMessage());
+        Debug.Log(dialogue[dialogueCursor].Type);
+        if (dialogue[dialogueCursor].Type == Page.PageType.Window)
+        {
+            Debug.Log(dialogue[dialogueCursor].Window);
+            GameObject window = canvas.transform.Find(dialogue[dialogueCursor].Window).gameObject;
+            window.GetComponent<CanvasGroup>().alpha = 1;
+            EndConversation();
+            player.SetListening(true);
+            return;
+        }
         textBox.text = "";
-        currentLine = dialogue[dialogueCursor].GetMessage();
+        currentLine = dialogue[dialogueCursor].Message;
         dialogueCursor++;
         scrollingCursor = 0;
         scrolling = true;

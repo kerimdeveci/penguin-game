@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Home.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Boss.unity
     guid: 3e147c0177dddd741b97c66bdf29ea71
+  - enabled: 1
+    path: Assets/Scenes/Monster.unity
+    guid: 8123bf9767c14004591bd7eb4aaa97a3
   m_configObjects: {}

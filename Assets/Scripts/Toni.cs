@@ -9,10 +9,10 @@ public class Toni : Interactable
         base.Start();
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("Hello", null));
-        dialogue.Add(new Page("The quick brown fox jumps over the lazy dog", null));
-        dialogue.Add(new Page("Pack my box with five dozen liquor jugs", null));
-        dialogue.Add(new Page("The five boxing wizards jump quickly", null));
+        dialogue.Add(new Page("Hello"));
+        dialogue.Add(new Page("The quick brown fox jumps over the lazy dog"));
+        dialogue.Add(new Page("Pack my box with five dozen liquor jugs"));
+        dialogue.Add(new Page("The five boxing wizards jump quickly"));
     }
 
     void Update()
