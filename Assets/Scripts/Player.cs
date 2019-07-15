@@ -36,7 +36,13 @@ public class Player : MonoBehaviour
         weaponObject.SetActive(false);
         listening = false;
 
+        LoadWeapon();
         Attack();
+    }
+
+    void LoadWeapon()
+    {
+        weapon = new Weapon(0, "Wooden Club", 10, 0.3f, Weapon.WeaponModifier.Critical);
     }
 
     // Update is called once per frame
@@ -163,6 +169,18 @@ public class Player : MonoBehaviour
         {
             SetInInteractRange(true);
         }
+        if (other.gameObject.name == "Shard")
+        {
+            Physics.IgnoreCollision(other, GetComponent<CapsuleCollider>());
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.name == "Shard")
+        {
+            Physics.IgnoreCollision(other, GetComponent<CapsuleCollider>());
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -206,11 +224,20 @@ public class Player : MonoBehaviour
 
 public class Weapon
 {
-    private string weaponName { get; set; }
-    private string buffName { get; set; }
-    private int attack { get; set; }
-    private float modifierChance { get; set; }
-    private WeaponModifier modifier { get; set; }
+    public int ID { get; set; }
+    public string Name { get; set; }
+    public int Attack { get; set; }
+    public float ModifierChance { get; set; }
+    public WeaponModifier Modifier { get; set; }
 
-    public enum WeaponModifier { Stun, Poison, Burn, Shrink, Freeze };
+    public enum WeaponModifier { Critical, Poison, Burn, Shrink, Freeze };
+
+    public Weapon (int id, string name, int attack, float modifierChance, WeaponModifier modifier)
+    {
+        ID = id;
+        Name = name;
+        Attack = attack;
+        ModifierChance = modifierChance;
+        Modifier = modifier;
+    }
 }
