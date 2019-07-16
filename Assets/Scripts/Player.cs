@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
         listening = false;
 
         LoadWeapons();
-        SwitchWeapon();
+        SetWeapon(0);
         Attack();
     }
 
@@ -55,14 +55,17 @@ public class Player : MonoBehaviour
         weaponsObject.SetActive(false);
     }
 
-    void SwitchWeapon()
+    public void SetWeapon(int id)
     {
-        weapon = weapons[0];
+
+        transform.rotation = Quaternion.identity;
+        weapon = weapons[id];
         Transform currentWeapon = transform.Find("Model/ArmedArm/Club");
         Transform targetWeapon = weaponsObject.transform.Find(weapon.Name);
         Transform arm = transform.Find("Model/ArmedArm");
         Vector3 position = new Vector3(arm.position.x + targetWeapon.position.x, arm.position.y + targetWeapon.position.y, arm.position.z + 0.5f);
-        Instantiate(targetWeapon, position, targetWeapon.rotation, arm);
+        
+        Instantiate(targetWeapon, position, new Quaternion(targetWeapon.rotation.x, targetWeapon.rotation.y + transform.rotation.y, targetWeapon.rotation.z, targetWeapon.rotation.w), arm);
     }
 
     // Update is called once per frame

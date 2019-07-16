@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
 using UnityEngine.UI;
+using System;
 
 public class DialogueBox : MonoBehaviour
 {
@@ -90,13 +92,16 @@ public class DialogueBox : MonoBehaviour
             return;
         }
         Debug.Log(dialogue[dialogueCursor].Type);
-        if (dialogue[dialogueCursor].Type == Page.PageType.Window)
+        if (dialogue[dialogueCursor].Type == Page.PageType.Function)
         {
-            Debug.Log(dialogue[dialogueCursor].Window);
-            GameObject window = canvas.transform.Find(dialogue[dialogueCursor].Window).gameObject;
-            window.GetComponent<CanvasGroup>().alpha = 1;
+            Debug.Log(dialogue[dialogueCursor].Callback.Item1);
+            Debug.Log(dialogue[dialogueCursor].Callback.Item2);
+            Type thisType = dialogue[dialogueCursor].Callback.Item1.GetType();
+            Debug.Log(thisType);
+            MethodInfo theMethod = thisType.GetMethod(dialogue[dialogueCursor].Callback.Item2);
+            Debug.Log(theMethod);
+            theMethod.Invoke(dialogue[dialogueCursor].Callback.Item1, null);
             EndConversation();
-            player.SetListening(true);
             return;
         }
         textBox.text = "";

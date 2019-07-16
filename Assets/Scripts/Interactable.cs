@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    Player player;
-    GameObject canvas;
+    public Player player;
+    public GameObject canvas;
     InteractPrompt interactPrompt;
     DialogueBox dialogueBox;
     bool playerInRange = false;
@@ -89,10 +90,10 @@ public class Interactable : MonoBehaviour
 
 public class Page
 {
-    public enum PageType { Line, Option, Window };
+    public enum PageType { Line, Option, Function };
 
     public string Message { get; set; }
-    public string Window { get; set; }
+    public Tuple<Interactable, string> Callback { get; set; }
     public OrderedDictionary Options { get; set; }
     public PageType Type { get; set; }
 
@@ -100,23 +101,23 @@ public class Page
     {
         this.Message = message;
         this.Options = null;
-        this.Window = null;
+        this.Callback = null;
         this.Type = PageType.Line;
     }
 
-    public Page(string message, string window)
+    public Page(string message, Tuple<Interactable, string> callback)
     {
         this.Message = message;
-        this.Window = window;
+        this.Callback = callback;
         this.Options = null;
-        this.Type = PageType.Window;
+        this.Type = PageType.Function;
     }
 
     public Page(string message, OrderedDictionary options)
     {
         this.Message = message;
         this.Options = options;
-        this.Window = null;
+        this.Callback = null;
         this.Type = PageType.Option;
     }
 }

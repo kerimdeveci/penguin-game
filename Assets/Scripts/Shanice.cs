@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +11,16 @@ public class Shanice : Interactable
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("Hello, this is Shanice"));
+        dialogue.Add(new Page("UIEnhancement", Tuple.Create((Interactable)this, "SwitchWeapon")));
     }
 
     void Update()
     {
         base.Update();
+    }
+
+    public void SwitchWeapon()
+    {
+        player.SetWeapon(2);
     }
 }
