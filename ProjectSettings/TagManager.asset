@@ -7,6 +7,7 @@ TagManager:
   - PlayerWeapon
   - Canvas
   - Broken
+  - Weapons
   layers:
   - Default
   - TransparentFX

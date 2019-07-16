@@ -14,6 +14,10 @@ public class Player : MonoBehaviour
     GameObject weaponObject;
     GameObject model;
     GameObject weaponArm;
+    GameObject weaponsObject;
+    List<Weapon> weapons;
+    List<Vector3> weaponsPositions;
+    List<Quaternion> weaponsRotations;
     public Weapon weapon { get; set; }
     bool colorUpdated = false;
     float lastDamage = -10f;
@@ -33,16 +37,32 @@ public class Player : MonoBehaviour
         model = transform.Find("Model").gameObject;
         weaponArm = transform.Find("Model/ArmedArm").gameObject;
         weaponObject = GameObject.FindGameObjectWithTag("PlayerWeapon");
+        weaponsObject = GameObject.FindGameObjectWithTag("Weapons");
         weaponObject.SetActive(false);
         listening = false;
 
-        LoadWeapon();
+        LoadWeapons();
+        SwitchWeapon();
         Attack();
     }
 
-    void LoadWeapon()
+    void LoadWeapons()
     {
-        weapon = new Weapon(0, "Wooden Club", 10, 0.3f, Weapon.WeaponModifier.Critical);
+        weapons = new List<Weapon>();
+        weapons.Add(new Weapon(0, "Wooden Club", 10, 0.3f, Weapon.WeaponModifier.Critical));
+        weapons.Add(new Weapon(1, "Spiked Club", 10, 0.3f, Weapon.WeaponModifier.Critical));
+        weapons.Add(new Weapon(2, "Metal Club", 10, 0.3f, Weapon.WeaponModifier.Critical));
+        weaponsObject.SetActive(false);
+    }
+
+    void SwitchWeapon()
+    {
+        weapon = weapons[0];
+        Transform currentWeapon = transform.Find("Model/ArmedArm/Club");
+        Transform targetWeapon = weaponsObject.transform.Find(weapon.Name);
+        Transform arm = transform.Find("Model/ArmedArm");
+        Vector3 position = new Vector3(arm.position.x + targetWeapon.position.x, arm.position.y + targetWeapon.position.y, arm.position.z + 0.5f);
+        Instantiate(targetWeapon, position, targetWeapon.rotation, arm);
     }
 
     // Update is called once per frame
