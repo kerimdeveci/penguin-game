@@ -57,10 +57,14 @@ public class Player : MonoBehaviour
 
     public void SetWeapon(int id)
     {
-
         transform.rotation = Quaternion.identity;
+        Debug.Log(weapon);
+        if (weapon != null)
+        {
+            GameObject currentWeapon = transform.Find("Model/ArmedArm/" + weapon.Name + "(Clone)").gameObject;
+            Destroy(currentWeapon);
+        }
         weapon = weapons[id];
-        Transform currentWeapon = transform.Find("Model/ArmedArm/Club");
         Transform targetWeapon = weaponsObject.transform.Find(weapon.Name);
         Transform arm = transform.Find("Model/ArmedArm");
         Vector3 position = new Vector3(arm.position.x + targetWeapon.position.x, arm.position.y + targetWeapon.position.y, arm.position.z + 0.5f);
