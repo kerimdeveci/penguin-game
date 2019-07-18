@@ -32,7 +32,6 @@ public class Teleporter : MonoBehaviour
         rend.material.Lerp(material1, material2, lerp);
         if (startFadeOut)
         {
-            Debug.Log(fadeScreenAlpha);
             if (!fadeOutInProgress)
             {
                 SceneManager.LoadScene(destination);

@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public GameObject canvas;
     float turnSpeed = 20f;
     int health = 10;
     float speed = 2f;
@@ -26,12 +28,14 @@ public class Player : MonoBehaviour
     bool stepLeftFoot = true;
     public bool listening;
     bool inInteractRange;
+    public int Coins { get; set; }
 
     float attackStart = -10f;
 
     // Start is called before the first frame update
     void Start()
     {
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         model = transform.Find("Model").gameObject;
@@ -40,6 +44,7 @@ public class Player : MonoBehaviour
         weaponsObject = GameObject.FindGameObjectWithTag("Weapons");
         weaponObject.SetActive(false);
         listening = false;
+        Coins = 0;
 
         LoadWeapons();
         SetWeapon(0);
@@ -246,6 +251,14 @@ public class Player : MonoBehaviour
             iTween.ColorTo(model, iTween.Hash("r", 0, "b", 0, "g", 0, "time", 0));
             colorUpdated = false;
         }
+    }
+
+    public int UpdateCoins(int add)
+    {
+        Text coinsText = canvas.transform.Find("Coins/Text").GetComponent<Text>();
+        Coins = Coins + add;
+        coinsText.text = Coins.ToString();
+        return Coins;
     }
 }
 

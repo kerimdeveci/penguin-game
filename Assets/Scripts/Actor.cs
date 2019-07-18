@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Actor : MonoBehaviour
 {
+    public Transform items;
+    public Player player;
     public enum State { Idle, Attacking, Walking, Following };
 
     State state;
@@ -22,6 +24,8 @@ public class Actor : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        items = GameObject.FindGameObjectWithTag("Items").transform;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         state = State.Idle;
         model = transform.Find("Model").gameObject;
         rigidbody = GetComponent<Rigidbody>();
@@ -44,9 +48,9 @@ public class Actor : MonoBehaviour
         return this.state == state;
     }
 
-    void Die()
+    public virtual void Die()
     {
-        Debug.Log("Enemy - Die");
+        Debug.Log("Actor - Die");
 
         timeDied = Time.time;
 
@@ -69,7 +73,7 @@ public class Actor : MonoBehaviour
         if (IsDead() && Time.time - timeDied > 1f)
         {
             gameObject.SetActive(false);
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         if (Time.time - timeLastDamaged > 0.1f && colorUpdated)
         {

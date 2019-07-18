@@ -147,4 +147,18 @@ public class Enemy : Actor
 
         SetState(State.Idle);
     }
+
+    public override void Die()
+    {
+        base.Die();
+        Debug.Log("Enemy - Die");
+        DropLoot();
+    }
+
+    void DropLoot()
+    {
+        Debug.Log("DropLoot");
+        GameObject coinObject = items.Find("Coin").gameObject;
+        Instantiate(coinObject, transform.position, coinObject.transform.rotation);
+    }
 }
