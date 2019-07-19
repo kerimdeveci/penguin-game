@@ -94,14 +94,11 @@ public class DialogueBox : MonoBehaviour
         Debug.Log(dialogue[dialogueCursor].Type);
         if (dialogue[dialogueCursor].Type == Page.PageType.Function)
         {
-            Debug.Log(dialogue[dialogueCursor].Callback.Item1);
-            Debug.Log(dialogue[dialogueCursor].Callback.Item2);
-            Type thisType = dialogue[dialogueCursor].Callback.Item1.GetType();
-            Debug.Log(thisType);
-            MethodInfo theMethod = thisType.GetMethod(dialogue[dialogueCursor].Callback.Item2);
-            Debug.Log(theMethod);
-            theMethod.Invoke(dialogue[dialogueCursor].Callback.Item1, null);
+            Page currentDialogue = dialogue[dialogueCursor];
             EndConversation();
+            Type thisType = currentDialogue.Callback.Item1.GetType();
+            MethodInfo theMethod = thisType.GetMethod(currentDialogue.Callback.Item2);
+            theMethod.Invoke(currentDialogue.Callback.Item1, null);
             return;
         }
         textBox.text = "";

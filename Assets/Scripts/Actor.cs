@@ -85,7 +85,10 @@ public class Actor : MonoBehaviour
     public void TakeDamage()
     {
         Debug.Log("Enemy - TakeDamage");
-
+        if (IsDead())
+        {
+            return;
+        }
         iTween.PunchPosition(model, iTween.Hash("y", 0.5, "time", 1));
         iTween.ColorTo(model, iTween.Hash("r", 0.3, "b", 0.3, "g", 0.3, "time", 0));
         colorUpdated = true;
