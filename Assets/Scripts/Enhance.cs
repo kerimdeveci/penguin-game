@@ -29,7 +29,10 @@ public class Enhance : MonoBehaviour
 
     void EnhanceRoll()
     {
-
+        Debug.Log("EnhanceRoll");
+        Weapon weapon = player.Weapon;
+        weapon.Attack = 30;
+        player.Weapon = weapon;
     }
 
     void Open()
@@ -45,6 +48,7 @@ public class Enhance : MonoBehaviour
     public void ButtonClickEnhance()
     {
         Debug.Log("ButtonClickEnhance");
+        EnhanceRoll();
     }
 
     public void ButtonClickLeave()

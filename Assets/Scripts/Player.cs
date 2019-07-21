@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     List<Weapon> weapons;
     List<Vector3> weaponsPositions;
     List<Quaternion> weaponsRotations;
-    public Weapon weapon { get; set; }
+    public Weapon Weapon { get; set; }
     bool colorUpdated = false;
     float lastDamage = -10f;
     bool isWalking;
@@ -63,14 +63,14 @@ public class Player : MonoBehaviour
     public void SetWeapon(int id)
     {
         transform.rotation = Quaternion.identity;
-        Debug.Log(weapon);
-        if (weapon != null)
+        Debug.Log(Weapon);
+        if (Weapon != null)
         {
-            GameObject currentWeapon = transform.Find("Model/ArmedArm/" + weapon.Name + "(Clone)").gameObject;
+            GameObject currentWeapon = transform.Find("Model/ArmedArm/" + Weapon.Name + "(Clone)").gameObject;
             Destroy(currentWeapon);
         }
-        weapon = weapons[id];
-        Transform targetWeapon = weaponsObject.transform.Find(weapon.Name);
+        Weapon = weapons[id];
+        Transform targetWeapon = weaponsObject.transform.Find(Weapon.Name);
         Transform arm = transform.Find("Model/ArmedArm");
         Vector3 position = new Vector3(arm.position.x + targetWeapon.position.x, arm.position.y + targetWeapon.position.y, arm.position.z + 0.5f);
         

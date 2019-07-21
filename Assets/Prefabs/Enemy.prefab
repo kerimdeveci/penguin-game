@@ -185,15 +185,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681721405d937b0419d5ba7b961ebb2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: {fileID: 0}
+  player: {fileID: 0}
   rigidbody: {fileID: 0}
   model: {fileID: 0}
   timeDied: 0
   timeStartAttack: 0
   timeLastDamaged: 0
   navMeshAgent: {fileID: 1838120399557999802}
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!195 &1838120399557999802
 NavMeshAgent:
   m_ObjectHideFlags: 0

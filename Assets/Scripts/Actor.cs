@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Actor : MonoBehaviour
 {
@@ -93,6 +94,13 @@ public class Actor : MonoBehaviour
         iTween.ColorTo(model, iTween.Hash("r", 0.3, "b", 0.3, "g", 0.3, "time", 0));
         colorUpdated = true;
         timeLastDamaged = Time.time;
+
+        Debug.Log(player.Weapon.Attack);
+
+        GameObject damageTextObject = items.Find("DamageNumber").gameObject;
+        damageTextObject = Instantiate(damageTextObject, transform.position, Quaternion.identity);
+        damageTextObject.GetComponent<DamageNumber>().Target = gameObject;
+        damageTextObject.GetComponent<TextMesh>().text = player.Weapon.Attack.ToString();
 
         health--;
 

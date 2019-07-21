@@ -24,7 +24,7 @@ public class Obstacle : MonoBehaviour
     {
         if (other.gameObject.name == "PlayerWeapon")
         {
-            if (player.weapon.ID == 0)
+            if (player.Weapon.ID == 0)
             {
                 Break();
             }
