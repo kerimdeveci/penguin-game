@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public GameObject canvas;
+    public Transform canvas;
     float turnSpeed = 20f;
-    int health = 10;
+    int health = 2;
     float speed = 2f;
     Animator animator;
     Rigidbody rigidbody;
@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     GameObject model;
     GameObject weaponArm;
     GameObject weaponsObject;
+    Slider healthSlider;
     List<Weapon> weapons;
     List<Vector3> weaponsPositions;
     List<Quaternion> weaponsRotations;
@@ -35,16 +36,19 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        canvas = GameObject.FindGameObjectWithTag("Canvas");
+        canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         model = transform.Find("Model").gameObject;
         weaponArm = transform.Find("Model/ArmedArm").gameObject;
+        healthSlider = canvas.Find("HealthSlider").GetComponent<Slider>();
         weaponObject = GameObject.FindGameObjectWithTag("PlayerWeapon");
         weaponsObject = GameObject.FindGameObjectWithTag("Weapons");
         weaponObject.SetActive(false);
         listening = false;
         Coins = 0;
+
+        healthSlider.maxValue = health;
 
         LoadWeapons();
         SetWeapon(0);
@@ -82,6 +86,10 @@ public class Player : MonoBehaviour
     {
         UpdateWeapon();
         UpdateColor();
+        if (IsDead())
+        {
+            return;
+        }
         UpdateWalk();
 
         if (!IsListening())
@@ -225,6 +233,10 @@ public class Player : MonoBehaviour
 
     private void TakeDamage()
     {
+        if (IsDead())
+        {
+            return;
+        }
         Debug.Log("Player - TakeDamage");
         iTween.PunchPosition(model, iTween.Hash("y", 0.5, "time", 1));
         iTween.ColorTo(model, iTween.Hash("r", 0.3, "b", 0.3, "g", 0.3, "time", 0));
@@ -232,6 +244,7 @@ public class Player : MonoBehaviour
         lastDamage = Time.time;
 
         health--;
+        healthSlider.value = health;
 
         if (health <= 0)
         {
@@ -242,6 +255,14 @@ public class Player : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player - Die");
+
+        iTween.RotateBy(model, iTween.Hash("y", 2, "time", 8));
+        iTween.ScaleTo(model, iTween.Hash("x", 0, "y", 0, "z", 0, "time", 2));
+    }
+
+    bool IsDead()
+    {
+        return health <= 0;
     }
 
     private void UpdateColor()
@@ -255,7 +276,7 @@ public class Player : MonoBehaviour
 
     public int UpdateCoins(int add)
     {
-        Text coinsText = canvas.transform.Find("Coins/Text").GetComponent<Text>();
+        Text coinsText = canvas.Find("Coins/Text").GetComponent<Text>();
         Coins = Coins + add;
         coinsText.text = Coins.ToString();
         return Coins;

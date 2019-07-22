@@ -31,7 +31,7 @@ public class Enhance : MonoBehaviour
     {
         Debug.Log("EnhanceRoll");
         Weapon weapon = player.Weapon;
-        weapon.Attack = 30;
+        weapon.Attack = Random.Range(10, 40);
         player.Weapon = weapon;
     }
 
