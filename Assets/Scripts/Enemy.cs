@@ -165,6 +165,16 @@ public class Enemy : Actor
         DropLoot();
     }
 
+    public override void Respawn()
+    {
+        base.Respawn();
+        Debug.Log("Enemy - Respawn");
+        iTween.MoveTo(gameObject, new Vector3(initialX, 0, initialZ), 0);
+        target = null;
+        navMeshAgent.isStopped = false;
+        timeLastIdleAnimation = Time.timeSinceLevelLoad;
+    }
+
     void DropLoot()
     {
         Debug.Log("DropLoot");

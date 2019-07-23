@@ -11,7 +11,8 @@ public class Actor : MonoBehaviour
 
     State state;
 
-    int health = 3;
+    int maxHealth = 3;
+    int health;
 
     bool colorUpdated = false;
 
@@ -25,6 +26,7 @@ public class Actor : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        health = maxHealth;
         items = GameObject.FindGameObjectWithTag("Items").transform;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         state = State.Idle;
@@ -49,11 +51,21 @@ public class Actor : MonoBehaviour
         return this.state == state;
     }
 
+    public virtual void Respawn()
+    {
+        GetComponent<BoxCollider>().enabled = true;
+        timeDied = 0.0f;
+        health = maxHealth;
+        iTween.ScaleTo(model, iTween.Hash("x", 0.4, "y", 0.4, "z", 0.4, "time", 1));
+    }
+
     public virtual void Die()
     {
         Debug.Log("Actor - Die");
 
         timeDied = Time.time;
+
+        GetComponent<BoxCollider>().enabled = false;
 
         iTween.RotateBy(model, iTween.Hash("y", 2, "time", 8));
         iTween.ScaleTo(model, iTween.Hash("x", 0, "y", 0, "z", 0, "time", 2));
@@ -73,13 +85,19 @@ public class Actor : MonoBehaviour
     {
         if (IsDead() && Time.time - timeDied > 1f)
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
             //Destroy(gameObject);
+            Debug.Log("Still active!");
         }
         if (Time.time - timeLastDamaged > 0.1f && colorUpdated)
         {
             iTween.ColorTo(model, iTween.Hash("r", 0, "b", 0, "g", 0, "time", 0));
             colorUpdated = false;
+        }
+
+        if (IsDead() && Time.time - timeDied > 5f)
+        {
+            Respawn();
         }
     }
 
