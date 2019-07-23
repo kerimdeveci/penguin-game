@@ -21,13 +21,18 @@ public class Enemy : Actor
     float timeLastWaypoint;
     float timeToNextWaypoint;
 
+    private void Awake()
+    {
+        random = new Random();
+        float delay = Random.Range(1f, 2f);
+        timeLastIdleAnimation = delay;
+    }
+
     void Start()
     {
         base.Start();
         initialX = transform.position.x;
         initialZ = transform.position.z;
-        random = new Random();
-        timeLastIdleAnimation = Random.Range(1f, 2f);
         target = null;
         Vector3 next = NextWaypoint();
         navMeshAgent.SetDestination(next);
@@ -54,7 +59,7 @@ public class Enemy : Actor
 
         UpdateIdle();
 
-        if (target && Time.time - timeSetTarget > 1.5f)
+        if (target && Time.timeSinceLevelLoad - timeSetTarget > 1.5f)
         {
             float distance = Vector3.Distance(transform.position, target.position);
             if (distance > 1.8f)
@@ -63,12 +68,17 @@ public class Enemy : Actor
             }
             else
             {
-                if (Time.time - timeStartAttack > 1.8f)
+                if (Time.timeSinceLevelLoad - timeStartAttack > 1.8f)
                 {
                     Attack();
                 }
             }
             iTween.LookUpdate(gameObject, target.position, 0f);
+            if (player.IsDead())
+            {
+                target = null;
+                navMeshAgent.isStopped = false;
+            }
         }
         else if (target)
         {
@@ -80,17 +90,17 @@ public class Enemy : Actor
         {
             if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
             {
-                if (Time.time - timeLastWaypoint > timeToNextWaypoint)
+                if (Time.timeSinceLevelLoad - timeLastWaypoint > timeToNextWaypoint)
                 {
-                    timeLastWaypoint = Time.time;
+                    timeLastWaypoint = Time.timeSinceLevelLoad;
                     timeToNextWaypoint = Random.Range(5f, 12f);
                     Vector3 next = NextWaypoint();
                     navMeshAgent.SetDestination(next);
                 }
             }
-            if (Time.time - timeLastWaypoint > 8f)
+            if (Time.timeSinceLevelLoad - timeLastWaypoint > 8f)
             {
-                timeLastWaypoint = Time.time;
+                timeLastWaypoint = Time.timeSinceLevelLoad;
                 timeToNextWaypoint = Random.Range(5f, 12f);
                 navMeshAgent.SetDestination(new Vector3(initialX, 0, initialZ));
             }
@@ -99,11 +109,11 @@ public class Enemy : Actor
 
     void UpdateIdle()
     {
-        if (Time.time - timeLastIdleAnimation > 1f && IsState(State.Idle) && Time.time - timeStartAttack > 2f)
+        if (Time.timeSinceLevelLoad - timeLastIdleAnimation > 1f && IsState(State.Idle) && Time.timeSinceLevelLoad - timeStartAttack > 2f)
         {
             iTween.PunchPosition(model, iTween.Hash("y", -0.4, "time", 0.7f));
             iTween.PunchScale(model, iTween.Hash("x", 0.1, "time", 0.9f));
-            timeLastIdleAnimation = Time.time;
+            timeLastIdleAnimation = Time.timeSinceLevelLoad;
         }
     }
 
@@ -122,7 +132,7 @@ public class Enemy : Actor
         {
             TakeDamage();
             target = other.gameObject.GetComponentInParent<Transform>();
-            timeSetTarget = Time.time;
+            timeSetTarget = Time.timeSinceLevelLoad;
         }
     }
 
@@ -137,7 +147,7 @@ public class Enemy : Actor
         Debug.Log("Enemy - Attack");
 
         SetState(State.Attacking);
-        timeStartAttack = Time.time;
+        timeStartAttack = Time.timeSinceLevelLoad;
 
         //iTween.Stop(model);
         //transform.localScale = new Vector3(1, 1, 1);

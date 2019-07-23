@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     List<Weapon> weapons;
     List<Vector3> weaponsPositions;
     List<Quaternion> weaponsRotations;
+    UI ui;
     public Weapon Weapon { get; set; }
     bool colorUpdated = false;
     float lastDamage = -10f;
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
         healthSlider = canvas.Find("HealthSlider").GetComponent<Slider>();
         weaponObject = GameObject.FindGameObjectWithTag("PlayerWeapon");
         weaponsObject = GameObject.FindGameObjectWithTag("Weapons");
+        ui = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UI>();
         weaponObject.SetActive(false);
         listening = false;
         Coins = 0;
@@ -257,10 +259,15 @@ public class Player : MonoBehaviour
         Debug.Log("Player - Die");
 
         iTween.RotateBy(model, iTween.Hash("y", 2, "time", 8));
-        iTween.ScaleTo(model, iTween.Hash("x", 0, "y", 0, "z", 0, "time", 2));
+        iTween.ScaleTo(model, iTween.Hash("x", 0, "y", 0, "z", 0, "time", 1.8f, "oncomplete", "CallbackGameOver", "oncompletetarget", this.gameObject));
     }
 
-    bool IsDead()
+    void CallbackGameOver()
+    {
+        ui.DoGameOver();
+    }
+
+    public bool IsDead()
     {
         return health <= 0;
     }
