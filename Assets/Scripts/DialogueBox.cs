@@ -12,7 +12,8 @@ public class DialogueBox : MonoBehaviour
     InteractPrompt interactPrompt;
     GameObject dialogueBox;
     Text textBox;
-    
+    UI ui;
+
     bool playerInRange = false;
     bool talking = false;
     bool waitingForInput = false;
@@ -35,6 +36,7 @@ public class DialogueBox : MonoBehaviour
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         dialogueBox = canvas.transform.Find("DialogueBox").gameObject;
         textBox = canvas.transform.Find("DialogueBox/DialogueText").GetComponent<Text>();
+        ui = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UI>();
         dialogueBox.SetActive(false);
         Debug.Log(textBox);
 
@@ -73,7 +75,7 @@ public class DialogueBox : MonoBehaviour
         //Debug.Log(talking);
         //Debug.Log(waitingForInput);
         //Debug.Log(Time.time - lastAction > lastActionCooldown);
-        if (talking && waitingForInput && Time.time - lastAction > lastActionCooldown)
+        if (talking && waitingForInput && Time.time - lastAction > lastActionCooldown && !ui.IsPaused())
         {
             if (Input.GetButtonDown("Fire1"))
             {

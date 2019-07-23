@@ -10,6 +10,7 @@ public class Interactable : MonoBehaviour
     public GameObject canvas;
     InteractPrompt interactPrompt;
     DialogueBox dialogueBox;
+    UI ui;
     bool playerInRange = false;
     bool talking = false;
     bool waitingForInput = false;
@@ -26,6 +27,7 @@ public class Interactable : MonoBehaviour
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         interactPrompt = canvas.transform.Find("InteractPrompt").GetComponent<InteractPrompt>();
         dialogueBox = canvas.transform.Find("DialogueBox").GetComponent<DialogueBox>();
+        ui = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UI>();
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("NPC does not have dialogue set"));
@@ -61,7 +63,7 @@ public class Interactable : MonoBehaviour
 
     void CheckPromptInput()
     {
-        if (playerInRange && !talking)
+        if (playerInRange && !talking && !ui.IsPaused())
         {
             if (Input.GetButtonDown("Fire1"))
             {
