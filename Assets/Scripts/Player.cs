@@ -70,6 +70,11 @@ public class Player : MonoBehaviour
             SetWeapon(Weapon.ID);
             Weapon.Name = weapons[Weapon.ID].Name;
         }
+
+        if (SceneManager.GetActiveScene().name == "Monster")
+        {
+            ui.DoGameComplete();
+        }
     }
 
     void LoadWeapons()
@@ -303,7 +308,6 @@ public class Player : MonoBehaviour
     public int UpdateCoins(int add)
     {
         Debug.Log("UpdateCoins");
-        Debug.Log(canvas);
         Text coinsText = canvas.Find("Coins/Text").GetComponent<Text>();
         Coins = Coins + add;
         coinsText.text = Coins.ToString();

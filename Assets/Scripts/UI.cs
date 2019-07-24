@@ -23,6 +23,7 @@ public class UI : MonoBehaviour
     List<Tuple<string, string>> optionsPause;
     int optionsPauseIndex;
     GameObject optionsPauseCursor;
+    PlayerRanking rankaroo;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,14 @@ public class UI : MonoBehaviour
         optionsPause.Add(Tuple.Create("Main Menu", "GoMenu"));
         optionsPauseIndex = 0;
         optionsPauseCursor = transform.Find("PauseScreen/Options/Cursor").gameObject;
+
+    }
+
+    public void DoGameComplete()
+    {
+        Debug.Log("DoGameComplete");
+        SaveRanking();
+        ListRanking();
     }
 
     // Update is called once per frame
@@ -166,6 +175,59 @@ public class UI : MonoBehaviour
         return pauseScreen.activeInHierarchy;
     }
 
+    void LoadRanking()
+    {
+        if (File.Exists(Application.persistentDataPath + "/playerRanking.txt"))
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/playerRanking.txt", FileMode.Open);
+            PlayerRanking playerData = (PlayerRanking)binaryFormatter.Deserialize(file);
+            file.Close();
+
+            rankaroo = playerData;
+        }
+        else
+        {
+            rankaroo = new PlayerRanking();
+            rankaroo.names = new List<string>();
+            rankaroo.weaponNames = new List<string>();
+            rankaroo.weaponAttacks = new List<int>();
+            rankaroo.timeCompletes = new List<float>();
+        }
+    }
+
+    public void SaveRanking()
+    {
+        LoadRanking();
+        rankaroo.test = "hahahahaha";
+        rankaroo.names.Add(player.Name);
+        rankaroo.weaponNames.Add(player.Weapon.Name + " " + player.Weapon.Modifier);
+        rankaroo.weaponAttacks.Add(player.Weapon.Attack);
+        rankaroo.timeCompletes.Add(Time.time);
+
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + "/playerRanking.txt", FileMode.OpenOrCreate);
+
+        PlayerRanking playerData = rankaroo;
+
+        binaryFormatter.Serialize(file, playerData);
+        file.Close();
+    }
+
+    public void ListRanking()
+    {
+        int length = rankaroo.timeCompletes.Count;
+
+        for (int i = 0; i < length; i++)
+        {
+            Debug.Log("------------------");
+            Debug.Log(rankaroo.names[i]);
+            Debug.Log(rankaroo.weaponNames[i]);
+            Debug.Log(rankaroo.weaponAttacks[i]);
+            Debug.Log(rankaroo.timeCompletes[i]);
+        }
+    }
+
     public void Save()
     {
         BinaryFormatter binaryFormatter = new BinaryFormatter();
@@ -219,7 +281,6 @@ public class UI : MonoBehaviour
             player.Weapon.ModifierChance = playerData.weaponModifierChance;
             player.Weapon.Modifier = playerData.weaponModifier;
 
-            Debug.Log(playerData.name);
         }
     }
 }
@@ -234,4 +295,14 @@ class PlayerData
     public int weaponAttack;
     public float weaponModifierChance;
     public string weaponModifier;
+}
+
+[Serializable]
+class PlayerRanking
+{
+    public string test;
+    public List<string> names;
+    public List<string> weaponNames;
+    public List<int> weaponAttacks;
+    public List<float> timeCompletes;
 }
