@@ -22,5 +22,6 @@ public class Shanice : Interactable
     public void SwitchWeapon()
     {
         player.SetWeapon(2);
+        player.Weapon = new Weapon(2, "Hakapik", 10, 0.3f, "Critical");
     }
 }

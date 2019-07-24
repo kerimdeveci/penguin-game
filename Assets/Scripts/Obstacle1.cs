@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Obstacle : MonoBehaviour
+public class Obstacle1 : MonoBehaviour
 {
     Player player;
     GameObject brokenRock;
@@ -11,7 +11,7 @@ public class Obstacle : MonoBehaviour
     {
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        brokenRock = GameObject.FindGameObjectWithTag("BrokenIce");
+        brokenRock = GameObject.FindGameObjectWithTag("BrokenRock");
     }
 
     // Update is called once per frame
@@ -24,7 +24,7 @@ public class Obstacle : MonoBehaviour
     {
         if (other.gameObject.name == "PlayerWeapon")
         {
-            if (player.Weapon.ID == 1 || player.Weapon.ID == 2)
+            if (player.Weapon.ID == 2)
             {
                 Break();
             }

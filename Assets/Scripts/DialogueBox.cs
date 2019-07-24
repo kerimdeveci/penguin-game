@@ -38,7 +38,6 @@ public class DialogueBox : MonoBehaviour
         textBox = canvas.transform.Find("DialogueBox/DialogueText").GetComponent<Text>();
         ui = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UI>();
         dialogueBox.SetActive(false);
-        Debug.Log(textBox);
 
         scrolling = false;
         scrollSpeed = 0.005f;

@@ -9,6 +9,9 @@ TagManager:
   - Broken
   - Weapons
   - Items
+  - InputName
+  - BrokenIce
+  - BrokenRock
   layers:
   - Default
   - TransparentFX

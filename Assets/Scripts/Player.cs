@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
@@ -31,6 +35,7 @@ public class Player : MonoBehaviour
     public bool listening;
     bool inInteractRange;
     public int Coins { get; set; }
+    public string Name { get; set; }
 
     float attackStart = -10f;
 
@@ -53,30 +58,44 @@ public class Player : MonoBehaviour
         healthSlider.maxValue = health;
 
         LoadWeapons();
-        SetWeapon(0);
         Attack();
+
+        SetWeapon(3);
+        Weapon = weapons[3];
+
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
+        {
+            ui.Load();
+            SetWeapon(Weapon.ID);
+            Weapon.Name = weapons[Weapon.ID].Name;
+        }
     }
 
     void LoadWeapons()
     {
         weapons = new List<Weapon>();
-        weapons.Add(new Weapon(0, "Wooden Club", 10, 0.3f, Weapon.WeaponModifier.Critical));
-        weapons.Add(new Weapon(1, "Spiked Club", 10, 0.3f, Weapon.WeaponModifier.Critical));
-        weapons.Add(new Weapon(2, "Metal Club", 10, 0.3f, Weapon.WeaponModifier.Critical));
+        weapons.Add(new Weapon(0, "Wooden Club", 10, 0.3f, "Critical"));
+        weapons.Add(new Weapon(1, "Spiked Club", 10, 0.3f, "Critical"));
+        weapons.Add(new Weapon(2, "Hakapik", 10, 0.3f, "Critical"));
+        weapons.Add(new Weapon(3, "Nothing", 10, 0.3f, "Critical"));
         weaponsObject.SetActive(false);
     }
 
     public void SetWeapon(int id)
     {
+        SetWeaponModel(id);
+    }
+
+    public void SetWeaponModel(int id)
+    {
         transform.rotation = Quaternion.identity;
-        Debug.Log(Weapon);
         if (Weapon != null)
         {
             GameObject currentWeapon = transform.Find("Model/ArmedArm/" + Weapon.Name + "(Clone)").gameObject;
             Destroy(currentWeapon);
         }
-        Weapon = weapons[id];
-        Transform targetWeapon = weaponsObject.transform.Find(Weapon.Name);
+        Transform targetWeapon = weaponsObject.transform.Find(weapons[id].Name);
         Transform arm = transform.Find("Model/ArmedArm");
         Vector3 position = new Vector3(arm.position.x + targetWeapon.position.x, arm.position.y + targetWeapon.position.y, arm.position.z + 0.5f);
         
@@ -283,6 +302,8 @@ public class Player : MonoBehaviour
 
     public int UpdateCoins(int add)
     {
+        Debug.Log("UpdateCoins");
+        Debug.Log(canvas);
         Text coinsText = canvas.Find("Coins/Text").GetComponent<Text>();
         Coins = Coins + add;
         coinsText.text = Coins.ToString();
@@ -296,11 +317,11 @@ public class Weapon
     public string Name { get; set; }
     public int Attack { get; set; }
     public float ModifierChance { get; set; }
-    public WeaponModifier Modifier { get; set; }
+    public string Modifier { get; set; }
 
-    public enum WeaponModifier { Critical, Poison, Burn, Shrink, Freeze };
+    // public enum WeaponModifier { Critical, Poison, Burn, Shrink, Freeze };
 
-    public Weapon (int id, string name, int attack, float modifierChance, WeaponModifier modifier)
+    public Weapon (int id, string name, int attack, float modifierChance, string modifier)
     {
         ID = id;
         Name = name;

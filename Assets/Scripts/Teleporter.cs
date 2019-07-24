@@ -36,6 +36,7 @@ public class Teleporter : MonoBehaviour
         if (collision.gameObject.name == "Player")
         {
             ui.DoFade();
+            ui.Save();
             timeStartFade = Time.time;
         }
     }

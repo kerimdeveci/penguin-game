@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
+    Player player;
     bool startFadeOut;
     bool startFadeIn;
     float fadeScreenAlpha;
@@ -23,6 +27,7 @@ public class UI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         startFadeIn = true;
         startFadeOut = false;
         fadeInInProgress = true;
@@ -38,7 +43,6 @@ public class UI : MonoBehaviour
         optionsPause.Add(Tuple.Create("Main Menu", "GoMenu"));
         optionsPauseIndex = 0;
         optionsPauseCursor = transform.Find("PauseScreen/Options/Cursor").gameObject;
-
     }
 
     // Update is called once per frame
@@ -147,6 +151,7 @@ public class UI : MonoBehaviour
 
     public void StartGame()
     {
+        SaveName();
         SceneManager.LoadScene("Home");
     }
 
@@ -160,4 +165,73 @@ public class UI : MonoBehaviour
     {
         return pauseScreen.activeInHierarchy;
     }
+
+    public void Save()
+    {
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + "/currentPlayer.txt", FileMode.OpenOrCreate);
+
+        PlayerData playerData = new PlayerData();
+        playerData.name = player.Name;
+        playerData.money = player.Coins;
+
+        playerData.weaponId = player.Weapon.ID;
+        playerData.weaponAttack = player.Weapon.Attack;
+        playerData.weaponModifierChance = player.Weapon.ModifierChance;
+        playerData.weaponModifier = player.Weapon.Modifier;
+
+        binaryFormatter.Serialize(file, playerData);
+        file.Close();
+    }
+
+    public void SaveName()
+    {
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + "/currentPlayer.txt", FileMode.OpenOrCreate);
+
+        InputField inputField = GameObject.FindGameObjectWithTag("InputName").GetComponent<InputField>();
+
+        PlayerData playerData = new PlayerData();
+        playerData.name = inputField.text;
+        playerData.money = 69;
+
+        playerData.weaponId = 3;
+        playerData.weaponAttack = 10;
+
+        binaryFormatter.Serialize(file, playerData);
+        file.Close();
+    }
+
+    public void Load()
+    {
+        if (File.Exists(Application.persistentDataPath + "/currentPlayer.txt"))
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/currentPlayer.txt", FileMode.Open);
+            PlayerData playerData = (PlayerData)binaryFormatter.Deserialize(file);
+            file.Close();
+
+            player.UpdateCoins(playerData.money);
+            player.Name = playerData.name;
+
+            player.Weapon.ID = playerData.weaponId;
+            player.Weapon.Attack = playerData.weaponAttack;
+            player.Weapon.ModifierChance = playerData.weaponModifierChance;
+            player.Weapon.Modifier = playerData.weaponModifier;
+
+            Debug.Log(playerData.name);
+        }
+    }
+}
+
+[Serializable]
+class PlayerData
+{
+    public string name;
+    public int money;
+
+    public int weaponId;
+    public int weaponAttack;
+    public float weaponModifierChance;
+    public string weaponModifier;
 }
