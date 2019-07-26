@@ -236,6 +236,7 @@ public class UI : MonoBehaviour
         PlayerData playerData = new PlayerData();
         playerData.name = player.Name;
         playerData.money = player.Coins;
+        playerData.progress = player.Progress;
 
         playerData.weaponId = player.Weapon.ID;
         playerData.weaponAttack = player.Weapon.Attack;
@@ -256,6 +257,7 @@ public class UI : MonoBehaviour
         PlayerData playerData = new PlayerData();
         playerData.name = inputField.text;
         playerData.money = 69;
+        playerData.progress = 1;
 
         playerData.weaponId = 3;
         playerData.weaponAttack = 10;
@@ -275,6 +277,7 @@ public class UI : MonoBehaviour
 
             player.UpdateCoins(playerData.money);
             player.Name = playerData.name;
+            player.Progress = playerData.progress;
 
             player.Weapon.ID = playerData.weaponId;
             player.Weapon.Attack = playerData.weaponAttack;
@@ -291,6 +294,7 @@ class PlayerData
     public string name;
     public int money;
 
+    public int progress;
     public int weaponId;
     public int weaponAttack;
     public float weaponModifierChance;

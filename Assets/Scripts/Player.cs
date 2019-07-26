@@ -37,6 +37,17 @@ public class Player : MonoBehaviour
     public int Coins { get; set; }
     public string Name { get; set; }
 
+    //0   Enter home
+    //1   Talked to Toni
+    //2   Got wooden club
+    //3   Enter monster map
+    //4   Talked to toni
+    //5   Got spiked club
+    //6   Enter monster map
+    //7   Talked to Toni
+    //8   Got metal club
+    public int Progress { get; set; }
+
     float attackStart = -10f;
 
     // Start is called before the first frame update
