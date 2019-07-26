@@ -275,7 +275,7 @@ public class UI : MonoBehaviour
         PlayerData playerData = new PlayerData();
         playerData.name = inputField.text;
         playerData.money = 69;
-        playerData.progress = 1;
+        playerData.progress = 0;
 
         playerData.weaponId = 3;
         playerData.weaponAttack = 10;

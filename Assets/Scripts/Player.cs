@@ -73,6 +73,7 @@ public class Player : MonoBehaviour
 
         SetWeapon(3);
         Weapon = weapons[3];
+        Progress = 0;
 
         string sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
@@ -85,6 +86,16 @@ public class Player : MonoBehaviour
         else
         {
             GameObject.FindGameObjectWithTag("Canvas").SetActive(false);
+        }
+
+        if (sceneName == "Monster" && Progress == 2)
+        {
+            Progress = 3;
+        }
+
+        if (sceneName == "Monster" && Progress == 5)
+        {
+            Progress = 6;
         }
     }
 
@@ -150,6 +161,7 @@ public class Player : MonoBehaviour
         else
         {
             rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
         }
 
         if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 0.8f && !IsListening() && !IsInInteractRange())
@@ -161,6 +173,7 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Debug.Log("Attack");
+        Debug.Log(Progress);
         iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 0.6f, "delay", 0.1f));
         iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 0.5f, "delay", 0.1f));
 
@@ -194,8 +207,12 @@ public class Player : MonoBehaviour
 
     private void OnAnimatorMove()
     {
-        rigidbody.MovePosition(rigidbody.position + movement * animator.deltaPosition.magnitude * speed);
-        rigidbody.MoveRotation(rotation);
+
+        if (!IsListening())
+        {
+            rigidbody.MovePosition(rigidbody.position + movement * animator.deltaPosition.magnitude * speed);
+            rigidbody.MoveRotation(rotation);
+        }
     }
 
     public bool IsListening()

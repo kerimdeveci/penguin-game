@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -96,7 +96,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: a303511dc09793040b7ab2f5a70da277,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -1015,6 +1016,75 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1216398045}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1228270130
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6826111057811456723, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_Name
+      value: Teleporter
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826111057811456726, guid: 05d20130677f9644db471d40886b0746,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 05d20130677f9644db471d40886b0746, type: 3}
 --- !u!1001 &1232916271
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2137,6 +2207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items: {fileID: 0}
   player: {fileID: 0}
+  maxHealth: 3
+  health: 0
   rigidbody: {fileID: 0}
   model: {fileID: 0}
   timeDied: 0

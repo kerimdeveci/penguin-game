@@ -80,7 +80,7 @@ public class Actor : MonoBehaviour
 
     public bool IsAttacking()
     {
-        return Time.time - timeStartAttack < 0.2f;
+        return Time.timeSinceLevelLoad - timeStartAttack < 0.2f;
     }
 
     void UpdateModel()
