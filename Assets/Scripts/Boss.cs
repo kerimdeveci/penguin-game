@@ -29,7 +29,7 @@ public class Boss : Actor
         weapon = transform.Find("EnemyWeapon").gameObject;
         weapon.SetActive(false);
         transform.rotation = Quaternion.LookRotation(new Vector3(0, Random.Range(0f, 180f), 0));
-        health = 1;
+        health = 240;
     }
 
     void FixedUpdate()

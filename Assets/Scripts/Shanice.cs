@@ -35,7 +35,7 @@ public class Shanice : Interactable
 
         if (player.Progress == 4)
         {
-            if (player.Coins >= 20)
+            if (player.Coins >= 10)
             {
                 dialogue = new List<Page>();
                 dialogue.Add(new Page("you want ice? i take money"));
@@ -71,7 +71,7 @@ public class Shanice : Interactable
         player.UpdateCoins(-20);
 
         player.SetWeapon(2);
-        player.Weapon = new Weapon(2, "Hakapik", 10, 0.3f, "Critical");
+        player.Weapon = new Weapon(2, "Hakapik", 30, 0.3f, "Bludgeoning");
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("break that rock"));
@@ -81,10 +81,10 @@ public class Shanice : Interactable
     {
         player.Progress = 5;
 
-        player.UpdateCoins(-20);
+        player.UpdateCoins(-10);
 
         player.SetWeapon(1);
-        player.Weapon = new Weapon(1, "Spiked Club", 10, 0.3f, "Critical");
+        player.Weapon = new Weapon(1, "Spiked Club", 20, 0.3f, "Bashing");
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("break that ice"));
@@ -95,7 +95,7 @@ public class Shanice : Interactable
         player.Progress = 2;
 
         player.SetWeapon(0);
-        player.Weapon = new Weapon(0, "Wooden Club", 10, 0.3f, "Critical");
+        player.Weapon = new Weapon(0, "Wooden Club", 10, 0.3f, "Thwarting");
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("good luck beb"));

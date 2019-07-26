@@ -12,7 +12,7 @@ public class Actor : MonoBehaviour
 
     State state;
 
-    public int maxHealth = 3;
+    public int maxHealth = 40;
     public int health;
 
     bool colorUpdated = false;
@@ -132,12 +132,18 @@ public class Actor : MonoBehaviour
 
         Debug.Log(player.Weapon.Attack);
 
+        int damage = 0;
+        if (player.Weapon.Attack > 0)
+        {
+            damage = player.Weapon.Attack + (int)Random.Range(-8, 8);
+        }
+
         GameObject damageTextObject = items.Find("DamageNumber").gameObject;
         damageTextObject = Instantiate(damageTextObject, transform.position, Quaternion.identity);
         damageTextObject.GetComponent<DamageNumber>().Target = gameObject;
-        damageTextObject.GetComponent<TextMesh>().text = player.Weapon.Attack.ToString();
+        damageTextObject.GetComponent<TextMesh>().text = damage.ToString();
 
-        health--;
+        health = health - damage;
 
         if (health <= 0)
         {

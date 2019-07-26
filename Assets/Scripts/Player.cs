@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 {
     public Transform canvas;
     float turnSpeed = 20f;
-    int health = 2;
+    int health = 8;
     float speed = 2f;
     Animator animator;
     Rigidbody rigidbody;
@@ -103,9 +103,9 @@ public class Player : MonoBehaviour
     {
         weapons = new List<Weapon>();
         weapons.Add(new Weapon(0, "Wooden Club", 10, 0.3f, "Critical"));
-        weapons.Add(new Weapon(1, "Spiked Club", 10, 0.3f, "Critical"));
-        weapons.Add(new Weapon(2, "Hakapik", 10, 0.3f, "Critical"));
-        weapons.Add(new Weapon(3, "Nothing", 10, 0.3f, "Critical"));
+        weapons.Add(new Weapon(1, "Spiked Club", 20, 0.3f, "Critical"));
+        weapons.Add(new Weapon(2, "Hakapik", 30, 0.3f, "Critical"));
+        weapons.Add(new Weapon(3, "Nothing", 0, 0.3f, "Critical"));
         weaponsObject.SetActive(false);
     }
 
@@ -164,16 +164,22 @@ public class Player : MonoBehaviour
             rigidbody.angularVelocity = Vector3.zero;
         }
 
-        if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 0.8f && !IsListening() && !IsInInteractRange())
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (!IsListening() && !IsInInteractRange())
         {
-            Attack();
+            if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
+            {
+                if (Input.GetButtonDown("Fire1") && Time.time - attackStart > 0.8f)
+                {
+                    Attack();
+                }
+            }
         }
     }
 
     private void Attack()
     {
         Debug.Log("Attack");
-        Debug.Log(Progress);
         iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 0.6f, "delay", 0.1f));
         iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 0.5f, "delay", 0.1f));
 
@@ -207,8 +213,7 @@ public class Player : MonoBehaviour
 
     private void OnAnimatorMove()
     {
-
-        if (!IsListening())
+        if (!IsListening() && !IsDead())
         {
             rigidbody.MovePosition(rigidbody.position + movement * animator.deltaPosition.magnitude * speed);
             rigidbody.MoveRotation(rotation);

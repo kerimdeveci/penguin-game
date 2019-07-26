@@ -21,8 +21,8 @@ public class Snowman : Interactable
 
     public void OpenEnhancements()
     {
-        GameObject window = canvas.transform.Find("UIEnhancement").gameObject;
-        window.GetComponent<CanvasGroup>().alpha = 1;
+        Enhance enhance = canvas.transform.Find("UIEnhancement").GetComponent<Enhance>();
+        enhance.Open();
         player.SetListening(true);
     }
 }

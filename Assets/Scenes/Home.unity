@@ -2893,7 +2893,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items: {fileID: 0}
   player: {fileID: 0}
-  maxHealth: 3
+  maxHealth: 40
   health: 0
   rigidbody: {fileID: 0}
   model: {fileID: 0}
@@ -8322,8 +8322,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6981604213396273568}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -28.83, y: 6.8210435, z: 17.78}
-  m_LocalScale: {x: 211.03235, y: 76.98857, z: 389.66052}
+  m_LocalPosition: {x: -28.83, y: 8.76, z: 17.78}
+  m_LocalScale: {x: 211.03235, y: 76.98857, z: 269.35672}
   m_Children: []
   m_Father: {fileID: 5438162177141812148}
   m_RootOrder: 15
@@ -9424,6 +9424,36 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: GoMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 7707514052343962278, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707514052343962278, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.3803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707514052343962278, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.5058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707514053171063627, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707514053171063627, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.3803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707514053171063627, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.5058824
+      objectReference: {fileID: 0}
     - target: {fileID: 5186074487012413846, guid: 10c5d6a876454564e8f86cbde75b7b9d,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -9438,6 +9468,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117146807841950165, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117146807841950165, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.3803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117146807841950165, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.5058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710972131640399631, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710972131640399631, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.3803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710972131640399631, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.5058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 1194073876126744082, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 1194073876126744082, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.3803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 1194073876126744082, guid: 10c5d6a876454564e8f86cbde75b7b9d,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.5058824
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10c5d6a876454564e8f86cbde75b7b9d, type: 3}

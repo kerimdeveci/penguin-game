@@ -13,7 +13,7 @@ public class Coin : MonoBehaviour
         transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         iTween.Init(this.gameObject);
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        value = 3;
+        value = 3 + (int) Random.Range(1, 3);
     }
 
     private void Start()

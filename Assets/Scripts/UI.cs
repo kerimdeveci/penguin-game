@@ -274,11 +274,11 @@ public class UI : MonoBehaviour
 
         PlayerData playerData = new PlayerData();
         playerData.name = inputField.text;
-        playerData.money = 69;
+        playerData.money = 0;
         playerData.progress = 0;
 
         playerData.weaponId = 3;
-        playerData.weaponAttack = 10;
+        playerData.weaponAttack = 0;
 
         binaryFormatter.Serialize(file, playerData);
         file.Close();
