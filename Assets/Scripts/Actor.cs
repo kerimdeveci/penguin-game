@@ -8,11 +8,12 @@ public class Actor : MonoBehaviour
     public Transform items;
     public Player player;
     public enum State { Idle, Attacking, Walking, Following };
+    UI ui;
 
     State state;
 
-    int maxHealth = 3;
-    int health;
+    public int maxHealth = 3;
+    public int health;
 
     bool colorUpdated = false;
 
@@ -26,6 +27,7 @@ public class Actor : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        ui = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UI>();
         health = maxHealth;
         items = GameObject.FindGameObjectWithTag("Items").transform;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -87,7 +89,6 @@ public class Actor : MonoBehaviour
         {
             //gameObject.SetActive(false);
             //Destroy(gameObject);
-            Debug.Log("Still active!");
         }
         if (Time.time - timeLastDamaged > 0.1f && colorUpdated)
         {
@@ -97,7 +98,23 @@ public class Actor : MonoBehaviour
 
         if (IsDead() && Time.time - timeDied > 5f)
         {
-            Respawn();
+            if (gameObject.name != "Boss")
+            {
+                Respawn();
+            }
+        }
+
+        if (IsDead() && Time.time - timeDied > 2f)
+        {
+            if (gameObject.name == "Boss" && !ui.IsFadingOut())
+            {
+                ui.DoGameComplete();
+                ui.DoFade();
+                if (Time.time - timeDied > 3f)
+                {
+                    ui.GoLeaderboards();
+                }
+            }
         }
     }
 

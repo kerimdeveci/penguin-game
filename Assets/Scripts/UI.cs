@@ -96,15 +96,19 @@ public class UI : MonoBehaviour
 
         if (Input.GetButtonDown("Cancel"))
         {
-            if(pauseScreen.activeInHierarchy)
+            string sceneName = SceneManager.GetActiveScene().name;
+            if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
             {
-                Time.timeScale = 1;
-                pauseScreen.SetActive(false);
-            }
-            else
-            {
-                Time.timeScale = 0;
-                pauseScreen.SetActive(true);
+                if(pauseScreen.activeInHierarchy)
+                {
+                    Time.timeScale = 1;
+                    pauseScreen.SetActive(false);
+                }
+                else
+                {
+                    Time.timeScale = 0;
+                    pauseScreen.SetActive(true);
+                }
             }
         }
 
@@ -136,6 +140,11 @@ public class UI : MonoBehaviour
         fadeOutInProgress = true;
     }
 
+    public bool IsFadingOut()
+    {
+        return fadeOutInProgress;
+    }
+
     public float GetFadeTime()
     {
         return fadeTime;
@@ -158,6 +167,16 @@ public class UI : MonoBehaviour
         pauseScreen.SetActive(false);
     }
 
+    public void GoLeaderboards()
+    {
+        SceneManager.LoadScene("Ranking");
+    }
+
+    public void GoEnterName()
+    {
+        SceneManager.LoadScene("Enter Name");
+    }
+
     public void StartGame()
     {
         SaveName();
@@ -166,7 +185,6 @@ public class UI : MonoBehaviour
 
     public void GoMenu()
     {
-        ResumeGame();
         SceneManager.LoadScene("Menu");
     }
 

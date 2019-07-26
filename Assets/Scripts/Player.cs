@@ -78,13 +78,13 @@ public class Player : MonoBehaviour
         if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
         {
             ui.Load();
+            ui.ResumeGame();
             SetWeapon(Weapon.ID);
             Weapon.Name = weapons[Weapon.ID].Name;
         }
-
-        if (SceneManager.GetActiveScene().name == "Monster")
+        else
         {
-            ui.DoGameComplete();
+            GameObject.FindGameObjectWithTag("Canvas").SetActive(false);
         }
     }
 

@@ -1008,7 +1008,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Leaderboards
+  m_Text: Congratulations!
 --- !u!222 &617480902
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1453,7 +1453,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2110007819}
-        m_MethodName: StartGame
+        m_MethodName: GoMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1716,7 +1716,7 @@ PrefabInstance:
     - target: {fileID: 7707514052993103858, guid: 10c5d6a876454564e8f86cbde75b7b9d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707514052993103862, guid: 10c5d6a876454564e8f86cbde75b7b9d,
         type: 3}
@@ -1826,12 +1826,12 @@ PrefabInstance:
     - target: {fileID: 3298551542929477432, guid: 10c5d6a876454564e8f86cbde75b7b9d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3298551542929477432, guid: 10c5d6a876454564e8f86cbde75b7b9d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10c5d6a876454564e8f86cbde75b7b9d, type: 3}
@@ -2295,7 +2295,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter Name
+  m_Text: 'You beat the game.
+
+    Thanks for playing (:'
 --- !u!222 &1384132709
 CanvasRenderer:
   m_ObjectHideFlags: 0
