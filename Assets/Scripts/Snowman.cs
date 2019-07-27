@@ -10,13 +10,22 @@ public class Snowman : Interactable
         base.Start();
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("Hello"));
-        dialogue.Add(new Page("UIEnhancement", Tuple.Create((Interactable) this, "OpenEnhancements")));
     }
 
     void Update()
     {
         base.Update();
+
+        if (player.Progress < 3)
+        {
+            dialogue = new List<Page>();
+            dialogue.Add(new Page("Snowbird: I ain't got time for your broke a*s, come back when you're ready to spill some real blood."));
+        }
+        else
+        {
+            dialogue.Add(new Page("Snowbird: Hey lil' man, you got the coin? We'll see what I can do with that club'o yours."));
+            dialogue.Add(new Page("", Tuple.Create((Interactable) this, "OpenEnhancements")));
+        }
     }
 
     public void OpenEnhancements()

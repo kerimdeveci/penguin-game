@@ -110,7 +110,7 @@ RectTransform:
   - {fileID: 5359595564822882240}
   - {fileID: 8294827729629396735}
   m_Father: {fileID: 7707514052993103862}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -572,7 +572,7 @@ RectTransform:
   m_Children:
   - {fileID: 1667713382229731342}
   m_Father: {fileID: 7707514052993103862}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -974,7 +974,7 @@ RectTransform:
   - {fileID: 2270029429014186326}
   - {fileID: 154987365902527397}
   m_Father: {fileID: 7707514052993103862}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1775,7 +1775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.2784314, g: 0.3803922, b: 0.5058824, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1784,10 +1784,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -2122,10 +2122,10 @@ RectTransform:
   - {fileID: 7707514053127063738}
   - {fileID: 7707514052331191613}
   - {fileID: 7707514052641361952}
+  - {fileID: 7106316257884912700}
   - {fileID: 7707514053231029638}
   - {fileID: 8963996160476206871}
   - {fileID: 4215282642118242608}
-  - {fileID: 7106316257884912700}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2206,6 +2206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 914b4d263264a674bae234b3364a0334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameIsEnding: 0
 --- !u!1 &7707514053072298753
 GameObject:
   m_ObjectHideFlags: 0
@@ -2472,7 +2473,7 @@ RectTransform:
   m_Children:
   - {fileID: 7707514051195936509}
   m_Father: {fileID: 7707514052993103862}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

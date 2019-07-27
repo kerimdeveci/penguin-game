@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,6 +26,7 @@ public class UI : MonoBehaviour
     int optionsPauseIndex;
     GameObject optionsPauseCursor;
     PlayerRanking rankaroo;
+    public bool gameIsEnding = false;
 
     // Start is called before the first frame update
     void Start()
@@ -44,14 +47,12 @@ public class UI : MonoBehaviour
         optionsPause.Add(Tuple.Create("Main Menu", "GoMenu"));
         optionsPauseIndex = 0;
         optionsPauseCursor = transform.Find("PauseScreen/Options/Cursor").gameObject;
-
     }
 
     public void DoGameComplete()
     {
         Debug.Log("DoGameComplete");
         SaveRanking();
-        ListRanking();
     }
 
     // Update is called once per frame
@@ -94,9 +95,10 @@ public class UI : MonoBehaviour
             }
         }
 
+        string sceneName = SceneManager.GetActiveScene().name;
         if (Input.GetButtonDown("Cancel"))
         {
-            string sceneName = SceneManager.GetActiveScene().name;
+            sceneName = SceneManager.GetActiveScene().name;
             if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
             {
                 if(pauseScreen.activeInHierarchy)
@@ -115,6 +117,10 @@ public class UI : MonoBehaviour
         if (optionsPauseCursor.activeInHierarchy && Input.GetButtonDown("Submit"))
         {
             Debug.Log(optionsPause[optionsPauseIndex]);
+
+            Type thisType = this.GetType();
+            MethodInfo theMethod = thisType.GetMethod(optionsPause[optionsPauseIndex].Item2);
+            theMethod.Invoke(this, null);
         }
 
         if (pauseScreen.activeInHierarchy && !Mathf.Approximately(Input.GetAxisRaw("Vertical"), 0))
@@ -214,36 +220,138 @@ public class UI : MonoBehaviour
         }
     }
 
-    public void SaveRanking()
+    public void DisplayRanking()
     {
+        Debug.Log("DisplayRanking");
+
         LoadRanking();
-        rankaroo.test = "hahahahaha";
-        rankaroo.names.Add(player.Name);
-        rankaroo.weaponNames.Add(player.Weapon.Name + " " + player.Weapon.Modifier);
-        rankaroo.weaponAttacks.Add(player.Weapon.Attack);
-        rankaroo.timeCompletes.Add(Time.time);
 
-        BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/playerRanking.txt", FileMode.OpenOrCreate);
+        ListRanking();
 
-        PlayerRanking playerData = rankaroo;
+        List<RankingOrder> rankingOrder = new List<RankingOrder>();
+        for (int i = 0; i < rankaroo.names.Count; i++)
+        {
+            rankingOrder.Add(new RankingOrder(i, rankaroo.weaponAttacks[i]));
+        }
+        List<RankingOrder> sortedRankingOrder = rankingOrder.OrderByDescending(o=>o.weaponAttack).ToList();
 
-        binaryFormatter.Serialize(file, playerData);
-        file.Close();
+        int numberToGet = 5;
+        if (sortedRankingOrder.Count < 5)
+        {
+            numberToGet = sortedRankingOrder.Count;
+        }
+
+        List<RankingOrder> topFive = sortedRankingOrder.GetRange(0, numberToGet);
+        Debug.Log(topFive.Count);
+
+        Transform rankings = GameObject.FindGameObjectWithTag("Ranking").transform;
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (numberToGet > i)
+            {
+                Transform rankObject = rankings.Find("RankingItem" + (i + 1)).transform;
+
+                RankingOrder order = topFive[i];
+
+                rankObject.Find("RankPlayerName").GetComponent<Text>().text = rankaroo.names[order.index];
+                rankObject.Find("RankTime").GetComponent<Text>().text = FormatTime(rankaroo.timeCompletes[order.index]);
+                rankObject.Find("RankWeapon").GetComponent<Text>().text = rankaroo.weaponNames[order.index];
+                rankObject.Find("RankAttack").GetComponent<Text>().text = rankaroo.weaponAttacks[order.index].ToString() + " ATT";
+                rankObject.Find("Image").GetComponent<RawImage>().enabled = true;
+            }
+        }
+
+        DisplayRecent();
+    }
+
+    void DisplayRecent()
+    {
+        Debug.Log("DisplayRecent");
+
+
+        if (File.Exists(Application.persistentDataPath + "/currentPlayer.txt"))
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/currentPlayer.txt", FileMode.Open);
+            PlayerData playerData = (PlayerData)binaryFormatter.Deserialize(file);
+            file.Close();
+            
+            if (!String.IsNullOrEmpty(playerData.weaponModifier))
+            {
+                Transform rankObject = GameObject.FindGameObjectWithTag("RankingRecent").transform;
+                rankObject.Find("RankPlayerName").GetComponent<Text>().text = playerData.name;
+                rankObject.Find("RankTime").GetComponent<Text>().text = "";
+                rankObject.Find("RankWeapon").GetComponent<Text>().text = "Hakapik of " + playerData.weaponModifier;
+                rankObject.Find("RankAttack").GetComponent<Text>().text = playerData.weaponAttack.ToString() + " ATT";
+                rankObject.Find("Image").GetComponent<RawImage>().enabled = true;
+            }
+        }
+    }
+
+    string FormatTime(float time)
+    {
+        int minutes = (int)time / 60;
+        int seconds = (int)time - 60 * minutes;
+        int milliseconds = (int)(100 * (time - minutes * 60 - seconds));
+        return string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
     }
 
     public void ListRanking()
     {
         int length = rankaroo.timeCompletes.Count;
 
+        Debug.Log("=====================");
         for (int i = 0; i < length; i++)
         {
-            Debug.Log("------------------");
             Debug.Log(rankaroo.names[i]);
             Debug.Log(rankaroo.weaponNames[i]);
             Debug.Log(rankaroo.weaponAttacks[i]);
             Debug.Log(rankaroo.timeCompletes[i]);
+            Debug.Log("------------------");
         }
+        Debug.Log("=====================");
+    }
+
+    public void SaveRanking()
+    {
+        Debug.Log("SaveRanking");
+        LoadRanking();
+
+        //int length = rankaroo.timeCompletes.Count;
+        //bool worthSaving = false;
+        //if (length >= 3)
+        //{
+        //    for (int i = 0; i < length; i++)
+        //    {
+        //        Debug.Log(rankaroo.weaponAttacks[i]);
+        //        if (rankaroo.weaponAttacks[i] < player.Weapon.Attack)
+        //        {
+        //            worthSaving = true;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    worthSaving = true;
+        //}
+
+        Debug.Log("Yeah we save this");
+        rankaroo.test = "";
+        rankaroo.names.Add(player.Name);
+        rankaroo.weaponNames.Add(player.Weapon.Name + " of " + player.Weapon.Modifier);
+        rankaroo.weaponAttacks.Add(player.Weapon.Attack);
+        rankaroo.timeCompletes.Add(Time.time - player.TimeStart);
+
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + "/playerRanking.txt", FileMode.OpenOrCreate);
+
+        PlayerRanking playerData = rankaroo;
+            
+        binaryFormatter.Serialize(file, playerData);
+        file.Close();
+        
+
     }
 
     public void Save()
@@ -255,6 +363,7 @@ public class UI : MonoBehaviour
         playerData.name = player.Name;
         playerData.money = player.Coins;
         playerData.progress = player.Progress;
+        playerData.timeStart = player.TimeStart;
 
         playerData.weaponId = player.Weapon.ID;
         playerData.weaponAttack = player.Weapon.Attack;
@@ -276,6 +385,7 @@ public class UI : MonoBehaviour
         playerData.name = inputField.text;
         playerData.money = 0;
         playerData.progress = 0;
+        playerData.timeStart = Time.time;
 
         playerData.weaponId = 3;
         playerData.weaponAttack = 0;
@@ -293,9 +403,12 @@ public class UI : MonoBehaviour
             PlayerData playerData = (PlayerData)binaryFormatter.Deserialize(file);
             file.Close();
 
+            Debug.Log(player.UpdateCoins(0));
+            Debug.Log(playerData.money);
             player.UpdateCoins(playerData.money);
             player.Name = playerData.name;
             player.Progress = playerData.progress;
+            player.TimeStart = playerData.timeStart;
 
             player.Weapon.ID = playerData.weaponId;
             player.Weapon.Attack = playerData.weaponAttack;
@@ -313,6 +426,7 @@ class PlayerData
     public int money;
 
     public int progress;
+    public float timeStart;
     public int weaponId;
     public int weaponAttack;
     public float weaponModifierChance;
@@ -327,4 +441,16 @@ class PlayerRanking
     public List<string> weaponNames;
     public List<int> weaponAttacks;
     public List<float> timeCompletes;
+}
+
+class RankingOrder
+{
+    public int index;
+    public int weaponAttack;
+
+    public RankingOrder(int index, int weaponAttack)
+    {
+        this.index = index;
+        this.weaponAttack = weaponAttack;
+    }
 }

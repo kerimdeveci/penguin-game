@@ -106,14 +106,17 @@ public class Actor : MonoBehaviour
 
         if (IsDead() && Time.time - timeDied > 2f)
         {
-            if (gameObject.name == "Boss" && !ui.IsFadingOut())
+            if (gameObject.name == "Boss" && !ui.gameIsEnding)
             {
+                ui.gameIsEnding = true;
                 ui.DoGameComplete();
                 ui.DoFade();
-                if (Time.time - timeDied > 3f)
-                {
-                    ui.GoLeaderboards();
-                }
+                ui.Save();
+            }
+            
+            if (gameObject.name == "Boss" && Time.time - timeDied > 3f)
+            {
+                ui.GoLeaderboards();
             }
         }
     }

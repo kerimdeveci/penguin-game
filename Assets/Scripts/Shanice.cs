@@ -12,7 +12,7 @@ public class Shanice : Interactable
         if (player.Progress == 0)
         {
             dialogue = new List<Page>();
-            dialogue.Add(new Page("asdf? That you sweetie?"));
+            dialogue.Add(new Page("Shanice: Hey sweetie, long time no see."));
         }
     }
 
@@ -20,16 +20,17 @@ public class Shanice : Interactable
     {
         base.Update();
 
-        if (player.Progress == 2 || player.Progress == 5 || player.Progress == 8 || player.Progress == 3 || player.Progress == 6)
+        if (player.Progress == 2 || player.Progress == 5 || player.Progress == 8 || player.Progress == 9 || player.Progress == 3 || player.Progress == 6)
         {
             dialogue = new List<Page>();
-            dialogue.Add(new Page("how you doing sweetie?"));
+            dialogue.Add(new Page("Shanice: You show those seals not to mess with us again, " + player.Name + "."));
         }
 
         if (player.Progress == 1)
         {
             dialogue = new List<Page>();
-            dialogue.Add(new Page("Hello, this is Shanice"));
+            dialogue.Add(new Page("Shanice: Hey sweetie, long time no see. You back to help us with Biggie-S? Got just the right thing hun -"));
+            dialogue.Add(new Page("Shanice: Your old man used to use this back when we had to take out T.U.N.A. He woulda be proud to see you now, " + player.Name + "."));
             dialogue.Add(new Page("", Tuple.Create((Interactable)this, "GiveWoodenClub")));
         }
 
@@ -38,13 +39,13 @@ public class Shanice : Interactable
             if (player.Coins >= 10)
             {
                 dialogue = new List<Page>();
-                dialogue.Add(new Page("you want ice? i take money"));
+                dialogue.Add(new Page("Shanice: Ice rocks? I might have the thing - but your girl here's gotta survive too, so I'll be needing 10 gold for that."));
                 dialogue.Add(new Page("", Tuple.Create((Interactable)this, "GiveSpikedClub")));
             }
             else
             {
                 dialogue = new List<Page>();
-                dialogue.Add(new Page("you want ice? you don't have the money"));
+                dialogue.Add(new Page("Shanice: Ice rocks? I might have the thing - but your girl here's gotta survive too, so I'll be needing 10 gold for that."));
             }
         }
 
@@ -53,13 +54,13 @@ public class Shanice : Interactable
             if (player.Coins >= 20)
             {
                 dialogue = new List<Page>();
-                dialogue.Add(new Page("you want rock? i take money"));
+                dialogue.Add(new Page("Shanice: Oh babe, I thought you might come across that so I prepared this for you, if you got 20 gold - this should get you through."));
                 dialogue.Add(new Page("", Tuple.Create((Interactable)this, "GiveMetalClub")));
             }
             else
             {
                 dialogue = new List<Page>();
-                dialogue.Add(new Page("you want rock? you don't have the money"));
+                dialogue.Add(new Page("Shanice: Oh babe, I thought you might come across that so I prepared something better for you - I'll get it to you for 20 gold."));
             }
         }
     }
@@ -74,7 +75,7 @@ public class Shanice : Interactable
         player.Weapon = new Weapon(2, "Hakapik", 30, 0.3f, "Bludgeoning");
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("break that rock"));
+        dialogue.Add(new Page("Shanice: Good luck hun!"));
     }
 
     public void GiveSpikedClub()
@@ -87,7 +88,7 @@ public class Shanice : Interactable
         player.Weapon = new Weapon(1, "Spiked Club", 20, 0.3f, "Bashing");
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("break that ice"));
+        dialogue.Add(new Page("Shanice: That should break that rock."));
     }
 
     public void GiveWoodenClub()
@@ -98,6 +99,6 @@ public class Shanice : Interactable
         player.Weapon = new Weapon(0, "Wooden Club", 10, 0.3f, "Thwarting");
 
         dialogue = new List<Page>();
-        dialogue.Add(new Page("good luck beb"));
+        dialogue.Add(new Page("Shanice: That should break those ice rocks."));
     }
 }

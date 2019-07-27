@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 {
     public Transform canvas;
     float turnSpeed = 20f;
-    int health = 8;
+    int health = 5;
     float speed = 2f;
     Animator animator;
     Rigidbody rigidbody;
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     List<Vector3> weaponsPositions;
     List<Quaternion> weaponsRotations;
     UI ui;
+    public float TimeStart { get; set; }
     public Weapon Weapon { get; set; }
     bool colorUpdated = false;
     float lastDamage = -10f;
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour
         SetWeapon(3);
         Weapon = weapons[3];
         Progress = 0;
+        TimeStart = Time.time;
 
         string sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
@@ -83,10 +85,15 @@ public class Player : MonoBehaviour
             SetWeapon(Weapon.ID);
             Weapon.Name = weapons[Weapon.ID].Name;
         }
+        else if (sceneName == "Ranking")
+        {
+            ui.DisplayRanking();
+        }
         else
         {
             GameObject.FindGameObjectWithTag("Canvas").SetActive(false);
         }
+
 
         if (sceneName == "Monster" && Progress == 2)
         {
@@ -97,6 +104,14 @@ public class Player : MonoBehaviour
         {
             Progress = 6;
         }
+
+        //if (sceneName == "Boss")
+        //{
+        //    Progress = 9;
+        //    SetWeapon(2);
+        //    Name = "hehe";
+        //    Weapon = new Weapon(2, "Hakapik", 43, 0.3f, "Bludgeoning");
+        //}
     }
 
     void LoadWeapons()
@@ -180,6 +195,7 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Debug.Log("Attack");
+        Debug.Log(Progress);
         iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 0.6f, "delay", 0.1f));
         iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 0.5f, "delay", 0.1f));
 
@@ -271,6 +287,23 @@ public class Player : MonoBehaviour
         if (other.gameObject.name == "Shard")
         {
             Physics.IgnoreCollision(other, GetComponent<CapsuleCollider>());
+        }
+        if (other.gameObject.name == "BossDialogueTrigger")
+        {
+            if (Progress == 8)
+            {
+                List<Page> dialogue = new List<Page>();
+                dialogue.Add(new Page("You: Biggie-S!"));
+                dialogue.Add(new Page("Biggie-S: ... ... ... ?"));
+                dialogue.Add(new Page("You: You been messin' on our turf for too long - let's settle this right here, right now!"));
+                dialogue.Add(new Page("Biggie-S: ... ... owo ... ..."));
+                dialogue.Add(new Page("You: That's it - you're going down, m*therfucker!"));
+                DialogueBox dialogueBox = canvas.transform.Find("DialogueBox").GetComponent<DialogueBox>();
+                dialogueBox.StartConversation(dialogue);
+                other.gameObject.SetActive(false);
+                Progress = 9;
+                ui.Save();
+            }
         }
     }
 

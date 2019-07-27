@@ -12,6 +12,8 @@ TagManager:
   - InputName
   - BrokenIce
   - BrokenRock
+  - Ranking
+  - RankingRecent
   layers:
   - Default
   - TransparentFX
