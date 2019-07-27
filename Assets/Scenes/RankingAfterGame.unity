@@ -1633,7 +1633,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Leaderboards
+  m_Text: Congratulations!
 --- !u!222 &617480902
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3141,7 +3141,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 'You killed Biggie-S.
+
+    Thank you for playing (:'
 --- !u!222 &1384132709
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4413,9 +4415,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Last Player
-
-'
+  m_Text: Your Stats
 --- !u!222 &2067854348
 CanvasRenderer:
   m_ObjectHideFlags: 0

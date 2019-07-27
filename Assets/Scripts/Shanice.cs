@@ -72,7 +72,7 @@ public class Shanice : Interactable
         player.UpdateCoins(-20);
 
         player.SetWeapon(2);
-        player.Weapon = new Weapon(2, "Hakapik", 30, 0.3f, "Bludgeoning");
+        player.Weapon = new Weapon(2, "Hakapik", 30, 0.1f, "Bludgeoning");
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("Shanice: Good luck hun!"));
@@ -85,7 +85,7 @@ public class Shanice : Interactable
         player.UpdateCoins(-10);
 
         player.SetWeapon(1);
-        player.Weapon = new Weapon(1, "Spiked Club", 20, 0.3f, "Bashing");
+        player.Weapon = new Weapon(1, "Spiked Club", 20, 0.1f, "Bashing");
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("Shanice: That should break that rock."));
@@ -96,7 +96,7 @@ public class Shanice : Interactable
         player.Progress = 2;
 
         player.SetWeapon(0);
-        player.Weapon = new Weapon(0, "Wooden Club", 10, 0.3f, "Thwarting");
+        player.Weapon = new Weapon(0, "Wooden Club", 10, 0.1f, "Thwarting");
 
         dialogue = new List<Page>();
         dialogue.Add(new Page("Shanice: That should break those ice rocks."));

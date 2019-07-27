@@ -96,7 +96,7 @@ public class Actor : MonoBehaviour
             colorUpdated = false;
         }
 
-        if (IsDead() && Time.time - timeDied > 5f)
+        if (IsDead() && Time.time - timeDied > 9f)
         {
             if (gameObject.name != "Boss")
             {
@@ -116,7 +116,7 @@ public class Actor : MonoBehaviour
             
             if (gameObject.name == "Boss" && Time.time - timeDied > 3f)
             {
-                ui.GoLeaderboards();
+                ui.GoLeaderboardsAfterGame();
             }
         }
     }

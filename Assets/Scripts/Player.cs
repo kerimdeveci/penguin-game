@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
         ui = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UI>();
         weaponObject.SetActive(false);
         listening = false;
-        Coins = 0;
+        UpdateCoins(0);
 
         healthSlider.maxValue = health;
 
@@ -81,7 +81,6 @@ public class Player : MonoBehaviour
         if (sceneName == "Home" || sceneName == "Monster" || sceneName == "Boss")
         {
             ui.Load();
-            ui.ResumeGame();
             SetWeapon(Weapon.ID);
             Weapon.Name = weapons[Weapon.ID].Name;
         }
@@ -112,15 +111,25 @@ public class Player : MonoBehaviour
         //    Name = "hehe";
         //    Weapon = new Weapon(2, "Hakapik", 43, 0.3f, "Bludgeoning");
         //}
+
+        //if (sceneName == "Home")
+        //{
+        //    SetWeapon(0);
+        //    Progress = 6;
+        //    Coins = 22;
+        //    Weapon = new Weapon(0, "Wooden Club", 10, 0.1f, "Thwarting");
+        //    //Weapon = new Weapon(1, "Spiked Club", 20, 0.1f, "Bashing");
+        //    //Weapon = new Weapon(2, "Hakapik", 30, 0.1f, "Bludgeoning");
+        //}
     }
 
     void LoadWeapons()
     {
         weapons = new List<Weapon>();
-        weapons.Add(new Weapon(0, "Wooden Club", 10, 0.3f, "Critical"));
-        weapons.Add(new Weapon(1, "Spiked Club", 20, 0.3f, "Critical"));
-        weapons.Add(new Weapon(2, "Hakapik", 30, 0.3f, "Critical"));
-        weapons.Add(new Weapon(3, "Nothing", 0, 0.3f, "Critical"));
+        weapons.Add(new Weapon(0, "Wooden Club", 10, 0.1f, "Thwarting"));
+        weapons.Add(new Weapon(1, "Spiked Club", 20, 0.1f, "Bashing"));
+        weapons.Add(new Weapon(2, "Hakapik", 30, 0.1f, "Bludgeoning"));
+        weapons.Add(new Weapon(3, "Nothing", 0, 0.1f, "Dissapointment"));
         weaponsObject.SetActive(false);
     }
 
@@ -195,7 +204,6 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Debug.Log("Attack");
-        Debug.Log(Progress);
         iTween.PunchPosition(model, iTween.Hash("z", 1, "time", 0.6f, "delay", 0.1f));
         iTween.PunchScale(model, iTween.Hash("y", 0.5, "time", 0.5f, "delay", 0.1f));
 

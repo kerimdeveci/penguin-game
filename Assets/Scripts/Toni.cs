@@ -26,7 +26,7 @@ public class Toni : Interactable
             dialogue.Add(new Page("You: Hey waddup."));
             dialogue.Add(new Page("Toni: Haven't forgotten about your old man Toni have you? We missed you 'round here, man!"));
             dialogue.Add(new Page("Toni: Tell you what though, things haven't been the same these streets. Them d*mn seals are back again - even brought Biggie-S with'em this time."));
-            dialogue.Add(new Page("You: No way man, he's here? Right now? We gotta do something."));
+            dialogue.Add(new Page("You: No way man, he's here? Right now? We gotta do something the seals."));
             dialogue.Add(new Page("Toni: Y'tellin' me. We thinkin' that we get rid of Biggie-S and the rest'll get off our turf. Help us out would ya?"));
             dialogue.Add(new Page("You: Sure thing my man, what you need?"));
             dialogue.Add(new Page("Toni: Our girl Shanice over there has some clubs. Real nice, do some real damage to them. They should do the job."));
@@ -62,13 +62,13 @@ public class Toni : Interactable
         if (player.Progress == 1)
         {
             dialogue = new List<Page>();
-            dialogue.Add(new Page("Toni: You got yourself a club from Shanice yet?"));
+            dialogue.Add(new Page("Toni: You got yourself a club from Shanice yet? We gotta find where Biggie-S at and whoop his a*s."));
         }
 
         if (player.Progress == 4)
         {
             dialogue = new List<Page>();
-            dialogue.Add(new Page("Toni: Shanice got you a club to get through the ice yet?"));
+            dialogue.Add(new Page("Toni: Shanice got you a club to get through the ice yet? We gotta be getting close to Biggie-S."));
         }
 
         if (player.Progress == 7)

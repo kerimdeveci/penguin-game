@@ -178,6 +178,11 @@ public class UI : MonoBehaviour
         SceneManager.LoadScene("Ranking");
     }
 
+    public void GoLeaderboardsAfterGame()
+    {
+        SceneManager.LoadScene("RankingAfterGame");
+    }
+
     public void GoEnterName()
     {
         SceneManager.LoadScene("Enter Name");
@@ -403,8 +408,7 @@ public class UI : MonoBehaviour
             PlayerData playerData = (PlayerData)binaryFormatter.Deserialize(file);
             file.Close();
 
-            Debug.Log(player.UpdateCoins(0));
-            Debug.Log(playerData.money);
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             player.UpdateCoins(playerData.money);
             player.Name = playerData.name;
             player.Progress = playerData.progress;

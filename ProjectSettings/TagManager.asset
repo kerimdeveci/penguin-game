@@ -14,6 +14,8 @@ TagManager:
   - BrokenRock
   - Ranking
   - RankingRecent
+  - RankingHeader
+  - RankingMessage
   layers:
   - Default
   - TransparentFX
