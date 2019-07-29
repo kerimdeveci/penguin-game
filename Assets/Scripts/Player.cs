@@ -84,13 +84,9 @@ public class Player : MonoBehaviour
             SetWeapon(Weapon.ID);
             Weapon.Name = weapons[Weapon.ID].Name;
         }
-        else if (sceneName == "Ranking")
+        else if (sceneName == "Ranking" || sceneName == "RankingAfterGame")
         {
             ui.DisplayRanking();
-        }
-        else
-        {
-            GameObject.FindGameObjectWithTag("Canvas").SetActive(false);
         }
 
 

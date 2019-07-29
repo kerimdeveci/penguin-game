@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,9 +23,16 @@ public class UI : MonoBehaviour
     float fadeTime = 1f;
     float fadeAlphaLimit = 1f;
     bool isGameOver = false;
+
+
     List<Tuple<string, string>> optionsPause;
     int optionsPauseIndex;
     GameObject optionsPauseCursor;
+
+    List<Tuple<string, string>> optionsMenu;
+    int optionsMenuIndex;
+    GameObject optionsMenuCursor;
+
     PlayerRanking rankaroo;
     public bool gameIsEnding = false;
 
@@ -47,6 +55,22 @@ public class UI : MonoBehaviour
         optionsPause.Add(Tuple.Create("Main Menu", "GoMenu"));
         optionsPauseIndex = 0;
         optionsPauseCursor = transform.Find("PauseScreen/Options/Cursor").gameObject;
+
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "Menu")
+        {
+            optionsMenu = new List<Tuple<string, string>>();
+            optionsMenu.Add(Tuple.Create("Play", "GoEnterName"));
+            optionsMenu.Add(Tuple.Create("LeaderBoards", "GoLeaderboards"));
+            optionsMenuIndex = 0;
+            optionsMenuCursor = GameObject.FindGameObjectWithTag("MenuOptions").transform.Find("Cursor").gameObject;
+        }
+
+        if (sceneName == "Menu" || sceneName == "Enter Name" || sceneName == "Ranking" || sceneName == "RankingAfterGame")
+        {
+            transform.Find("UIEnhancement").gameObject.SetActive(false);
+            transform.Find("HealthSlider").gameObject.SetActive(false);
+        }
     }
 
     public void DoGameComplete()
@@ -136,6 +160,45 @@ public class UI : MonoBehaviour
             {
                 optionsPauseIndex++;
                 optionsPauseCursor.transform.localPosition = new Vector3(optionsPauseCursor.transform.localPosition.x, optionsPauseCursor.transform.localPosition.y - 60);
+            }
+        }
+
+        if ((sceneName == "Ranking" || sceneName == "RankingAfterGame") && Input.GetButtonDown("Submit"))
+        {
+            GoMenu();
+        }
+
+        if (sceneName == "Menu" && Input.GetButtonDown("Submit"))
+        {
+            Debug.Log(optionsMenu[optionsMenuIndex]);
+
+            Type thisType = this.GetType();
+            MethodInfo theMethod = thisType.GetMethod(optionsMenu[optionsMenuIndex].Item2);
+            theMethod.Invoke(this, null);
+        }
+
+        if (sceneName == "Enter Name" && Input.GetButtonDown("Submit"))
+        {
+            InputField inputField = GameObject.FindGameObjectWithTag("InputName").GetComponent<InputField>();
+            if (!String.IsNullOrEmpty(inputField.text))
+            {
+                StartGame();
+            }
+        }
+
+        if (sceneName == "Menu" && !Mathf.Approximately(Input.GetAxisRaw("Vertical"), 0))
+        {
+            float vertical = Input.GetAxisRaw("Vertical");
+            if (vertical > 0 && optionsMenuIndex > 0)
+            {
+                optionsMenuIndex--;
+                optionsMenuCursor.transform.localPosition = new Vector3(optionsMenuCursor.transform.localPosition.x, optionsMenuCursor.transform.localPosition.y + 60);
+            }
+
+            if (vertical < 0 && optionsMenuIndex < optionsMenu.Count - 1)
+            {
+                optionsMenuIndex++;
+                optionsMenuCursor.transform.localPosition = new Vector3(optionsMenuCursor.transform.localPosition.x, optionsMenuCursor.transform.localPosition.y - 60);
             }
         }
     }
@@ -386,8 +449,20 @@ public class UI : MonoBehaviour
 
         InputField inputField = GameObject.FindGameObjectWithTag("InputName").GetComponent<InputField>();
 
+        string name = inputField.text;
+        if (String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name))
+        {
+            name = "Anonymous";
+        }
+        if (name.Length > 25)
+        {
+            name = name.Substring(0, 25);
+        }
+        Regex rgx = new Regex("[^a-zA-Z0-9 -/?/!]");
+        name = rgx.Replace(name, "");
+
         PlayerData playerData = new PlayerData();
-        playerData.name = inputField.text;
+        playerData.name = name;
         playerData.money = 0;
         playerData.progress = 0;
         playerData.timeStart = Time.time;

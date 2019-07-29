@@ -16,6 +16,7 @@ TagManager:
   - RankingRecent
   - RankingHeader
   - RankingMessage
+  - MenuOptions
   layers:
   - Default
   - TransparentFX
